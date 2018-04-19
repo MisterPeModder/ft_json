@@ -6,13 +6,14 @@
 /*   By: yguaye <yguaye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/19 01:26:24 by yguaye            #+#    #+#             */
-/*   Updated: 2018/04/19 06:13:19 by yguaye           ###   ########.fr       */
+/*   Updated: 2018/04/19 09:51:04 by yguaye           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef JSON_INTERNAL_H
 # define JSON_INTERNAL_H
 
+# include <sys/types.h>
 # include "json_datatypes.h"
 
 # define JRD_PACKET 128

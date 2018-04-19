@@ -6,7 +6,7 @@
 /*   By: yguaye <yguaye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/19 06:09:03 by yguaye            #+#    #+#             */
-/*   Updated: 2018/04/19 07:13:47 by yguaye           ###   ########.fr       */
+/*   Updated: 2018/04/19 16:51:56 by yguaye           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static t_json_value		*json_parse_value(t_json_str_it *it, t_json_value *val,
 
 #include <stdio.h>
 
-int						json_parse_obj_value(t_json_str_it *it,
+static int				json_parse_obj_value(t_json_str_it *it,
 		t_json_value *obj, t_json_value *first, t_json_parse_res *res)
 {
 	t_json_value		*values[2];
@@ -33,15 +33,12 @@ int						json_parse_obj_value(t_json_str_it *it,
 
 	if (first->obj.type != JSON_STRING)
 	{
-		printf("err type: %d\n", first->obj.type);
 		if (first->obj.type == JSON_SPECIAL_CHAR)
-			printf("val: %c\n", first->bol.value);
-		json_set_error(res, "non-string keys are not allowed!");
+			json_set_error(res, "non-string keys are not allowed!");
 		return (0);
 	}
 	if (!(values[0] = json_lexing(it, res)))
 		return (0);
-	printf("two bis\n");
 	if (values[0]->obj.type != JSON_SPECIAL_CHAR && values[1]->bol.value != ':')
 	{
 		json_set_error(res, "must have colon ':' after key");
@@ -49,10 +46,9 @@ int						json_parse_obj_value(t_json_str_it *it,
 	}
 	if (!(values[1] = json_lexing(it, res)))
 		return (0);
-	printf("two ter\n");
 	if (!(v = json_parse_value(it, values[1], res)))
 		return (0);
-	hm_put(obj->obj.data, values[0]->str.value, v);
+	hm_put(obj->obj.data, first->str.value, v);
 	return (1);
 }
 
@@ -71,21 +67,17 @@ t_json_value			*json_parse(t_json_str_it *it, char has_parent,
 	{
 		if (!(v = json_lexing(it, res)))
 			return (NULL);
-		printf("one\n");
 		if (v->obj.type == JSON_SPECIAL_CHAR && (
 					(is_array && v->bol.value == ']') ||
 					(!is_array && v->bol.value == '}')))
 			break;
-		printf("two\n");
 		if (!json_parse_obj_value(it, obj, v, res) ||
 				!(v = json_lexing(it, res)))
 			return (NULL);
-		printf("three\n");
 		if (v->obj.type != JSON_SPECIAL_CHAR && v->bol.value == ',')
 			has_comma = 1;
 		else
 			has_comma = 0;
-		printf("comma %d\n", has_comma);
 
 	}
 	if (has_comma)

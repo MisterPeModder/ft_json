@@ -6,7 +6,7 @@
 /*   By: yguaye <yguaye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/19 01:56:49 by yguaye            #+#    #+#             */
-/*   Updated: 2018/04/19 07:09:02 by yguaye           ###   ########.fr       */
+/*   Updated: 2018/04/19 16:58:13 by yguaye           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,9 +40,8 @@ int						main(int argc, char **argv)
 	printf("number of elements: %zu\n", hm_length(obj->obj.data));
 	while (hm_iter_next(&hmit))
 	{
-		printf("%s: ", hmit.key);
-		if (((t_json_value *)hmit.value)->obj.type == JSON_STRING)
-			printf("%s,\n", ((t_json_value *)hmit.value)->str.value);
+		printf("\"%s\": ", hmit.key);
+		printf("%s,\n", json_to_str((t_json_value *)hmit.value));
 	}
 	return (0);
 }
