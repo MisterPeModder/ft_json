@@ -6,26 +6,14 @@
 /*   By: yguaye <yguaye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/11 10:07:33 by yguaye            #+#    #+#             */
-/*   Updated: 2018/04/12 13:35:40 by yguaye           ###   ########.fr       */
+/*   Updated: 2018/04/19 03:45:09 by yguaye           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef JSON_H
 # define JSON_H
 
-# include "json_datatypes.h"
-
-/*
-** t_json_parse_res: the result of a JSON parsing.
-**
-** -err: a string representing the parsing error, may be NULL.
-** -obj: the parsed JSON object. NULL if the parsing failed.
-*/
-typedef struct			s_json_parse_res
-{
-	char				*err;
-	t_json_object		*obj;
-}						t_json_parse_res;
+# include "json_internal.h"
 
 /*
 ** json_from_file: parses a file's contents into a JSON object.
@@ -83,7 +71,7 @@ void					json_release_value(t_json_value **val);
 /*
 ** json_release_file: frees the passed JSON file.
 */
-void					json_release_file(t_json_file **file);
+void					json_release_file(t_json_parse_res **file);
 
 /*
 ** json_get_val: gets the value at key k.
