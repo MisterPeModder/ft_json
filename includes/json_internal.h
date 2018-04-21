@@ -6,7 +6,7 @@
 /*   By: yguaye <yguaye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/19 01:26:24 by yguaye            #+#    #+#             */
-/*   Updated: 2018/04/19 09:51:04 by yguaye           ###   ########.fr       */
+/*   Updated: 2018/04/21 18:27:04 by yguaye           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define JSON_INTERNAL_H
 
 # include <sys/types.h>
+# include <libft_base/list.h>
 # include "json_datatypes.h"
 
 # define JRD_PACKET 128
@@ -59,5 +60,7 @@ t_json_value			*json_parse(t_json_str_it *it, char has_parent,
 t_json_value			*json_lexing(t_json_str_it *it, t_json_parse_res *res);
 
 void					json_set_error(t_json_parse_res *res, char *msg);
+
+t_list					*json_obj_to_lst(const t_json_value *val);
 
 #endif
