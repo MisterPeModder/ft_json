@@ -6,7 +6,7 @@
 /*   By: yguaye <yguaye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/11 10:07:19 by yguaye            #+#    #+#             */
-/*   Updated: 2018/04/23 16:35:32 by yguaye           ###   ########.fr       */
+/*   Updated: 2018/04/23 17:08:26 by yguaye           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,11 +83,10 @@ typedef struct			s_json_array
 }						t_json_array;
 
 /*
-** t_json_number: holds a json boolean that is represented by a char.
+** t_json_bool: holds a json boolean that is represented by a char.
 **
 ** the 'value' char is safe to use and modify.
 */
-typedef struct			s_json_number
 typedef struct			s_json_bool
 {
 	t_json_vtype		type;

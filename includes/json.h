@@ -6,7 +6,7 @@
 /*   By: yguaye <yguaye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/11 10:07:33 by yguaye            #+#    #+#             */
-/*   Updated: 2018/04/23 16:14:10 by yguaye           ###   ########.fr       */
+/*   Updated: 2018/04/23 17:07:37 by yguaye           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,24 +74,41 @@ void					json_release_value(t_json_value **val);
 void					json_release_file(t_json_parse_res **file);
 
 /*
-** json_get_val: gets the value stored at key in a json OBJECT.
+** json_obj_get: gets the value stored at key k in a json OBJECT.
 **
 ** -obj: the json object to search from.
-** -key: the key;
+** -k: the key;
 **
 ** returns: a json value if found, null otherwise.
 */
-t_json_value			*json_obj_get_value(const t_json_object *obj,
-		const char *key);
+t_json_value			*json_obj_get(const t_json_object *obj, const char *k);
 
 /*
-** json_get_val: gets the value stored at index i in a json ARRAY.
+** json_arr_get: gets the value stored at index i in a json ARRAY.
 **
 ** -arr: the json array to search from.
 ** -i: the index;
 **
 ** returns: a json value if found, null otherwise.
 */
-t_json_value			*json_arr_get_value(const t_json_array *arr, size_t i);
+t_json_value			*json_arr_get(const t_json_array *arr, size_t i);
+
+/*
+** json_obj_put: stores a json_value into the passed object at key k.
+** if a value already exists at key, it will be freed.
+**
+** returns: 1 if successful, 0 if not.
+*/
+int						json_obj_put(t_json_object *obj, t_json_value *v,
+		const char *k);
+
+/*
+** json_arr_put: stores a json_value into the passed array at index i.
+** if a value already exists at index, it will be freed.
+**
+** returns: 1 if successful, 0 if not.
+*/
+int						json_arr_put(t_json_array *arr, t_json_value *v,
+		size_t i);
 
 #endif

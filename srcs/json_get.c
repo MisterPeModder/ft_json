@@ -6,19 +6,20 @@
 /*   By: yguaye <yguaye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/23 16:13:11 by yguaye            #+#    #+#             */
-/*   Updated: 2018/04/23 16:21:50 by yguaye           ###   ########.fr       */
+/*   Updated: 2018/04/23 16:40:01 by yguaye           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "json.h"
 
-t_json_value			*json_obj_get_value(const t_json_object *obj,
-		const char *key)
+t_json_value			*json_obj_get(const t_json_object *obj, const char *k)
 {
-	return (!obj || !key ? NULL : hm_get(obj->data, key));
+	return (!obj || obj->type != JSON_OBJECT || !k ?
+			NULL : hm_get(obj->data, k));
 }
 
-t_json_value			*json_arr_get_value(const t_json_array *arr, size_t i)
+t_json_value			*json_arr_get(const t_json_array *arr, size_t i)
 {
-	return (!arr || i >= arr->values_num ? NULL : arr->values[i]);
+	return (!arr || arr->type != JSON_ARRAY || i >= arr->values_num ?
+			NULL : arr->values[i]);
 }
