@@ -6,7 +6,7 @@
 /*   By: yguaye <yguaye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/19 01:40:49 by yguaye            #+#    #+#             */
-/*   Updated: 2018/04/23 16:22:28 by yguaye           ###   ########.fr       */
+/*   Updated: 2018/04/24 01:43:59 by yguaye           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,14 +34,18 @@ static void				json_release_value_helper(t_json_value *v)
 
 void					json_release_value(t_json_value **v)
 {
+	if (!v || !*v)
+		return ;
 	json_release_value_helper(*v);
-	v = NULL;
+	*v = NULL;
 }
 
-void					json_release_file(t_json_parse_res **file)
+void					json_release_file(t_json_parse_res **file, int rel_obj)
 {
 	if ((*file)->err)
 		free((*file)->err);
+	if (rel_obj && (*file)->obj)
+		json_release_value(&(*file)->obj);
 	ft_bzero(*file, sizeof(t_json_parse_res));
 	free(*file);
 	*file = NULL;

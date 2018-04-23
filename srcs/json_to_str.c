@@ -6,7 +6,7 @@
 /*   By: yguaye <yguaye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/19 16:54:23 by yguaye            #+#    #+#             */
-/*   Updated: 2018/04/23 13:50:30 by yguaye           ###   ########.fr       */
+/*   Updated: 2018/04/24 01:07:51 by yguaye           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,6 @@
 #include <libft_base/memory.h>
 #include <libft_base/stringft.h>
 #include "json.h"
-
-#include <stdio.h>
 
 static size_t			json_count_ln(const t_json_value *val)
 {
@@ -44,11 +42,9 @@ static size_t			json_count_ln(const t_json_value *val)
 char					**json_to_tab(const t_json_value *val)
 {
 	char				**tab;
-	size_t				len;
 
-	if (!(tab = ft_memalloc(sizeof(char *) * ((len = json_count_ln(val)) + 1))))
+	if (!(tab = ft_memalloc(sizeof(char *) * (json_count_ln(val) + 1))))
 		return (NULL);
-	printf("type: %d, lines: %zu\n", val->obj.type, len);
 	if (!json_val_to_tab(val, tab))
 		ft_strtabdel(&tab);
 	return (tab);
@@ -67,7 +63,6 @@ char					*json_to_str(const t_json_value *val)
 	len = 0;
 	while (tab[i])
 		len += ft_strlen(tab[i++]) + 1;
-	printf("tab len: %zu\n", len);
 	if (!(ret = ft_strnew(len)))
 	{
 		ft_strtabdel(&tab);
@@ -75,6 +70,10 @@ char					*json_to_str(const t_json_value *val)
 	}
 	i = 0;
 	while (tab[i])
-		ft_strcat(ret, ft_strconcat(tab[i++], "\n", 1));
+	{
+		ft_strcat(ret, tab[i++]);
+		ft_strcat(ret, "\n");
+	}
+	ft_strtabdel(&tab);
 	return (ret);
 }

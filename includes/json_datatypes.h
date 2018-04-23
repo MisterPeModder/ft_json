@@ -6,7 +6,7 @@
 /*   By: yguaye <yguaye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/11 10:07:19 by yguaye            #+#    #+#             */
-/*   Updated: 2018/04/23 17:08:26 by yguaye           ###   ########.fr       */
+/*   Updated: 2018/04/24 01:39:18 by yguaye           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,13 +115,14 @@ typedef union			u_json_value
 ** -err: a string representing the parsing error, will be NULL if no errors.
 ** -line: the line at witch the error occurred. is set to 0 if no errors.
 ** -obj: the parsed JSON object. NULL if the parsing failed.
+**       It is guaranteed that if non null, obj will be of type JSON_OBJECT.
 */
 typedef struct			s_json_parse_res
 {
 	char				*err;
 	int					line;
 	int					col;
-	t_json_object		*obj;
+	t_json_value		*obj;
 }						t_json_parse_res;
 
 #endif

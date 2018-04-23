@@ -6,7 +6,7 @@
 /*   By: yguaye <yguaye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/22 16:19:07 by yguaye            #+#    #+#             */
-/*   Updated: 2018/04/23 14:49:09 by yguaye           ###   ########.fr       */
+/*   Updated: 2018/04/24 01:05:02 by yguaye           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,37 +31,40 @@ static int				json_obj_to_tab(const t_json_value *val, char **tab)
 	t_hmiterator		it;
 	char				**sub;
 	size_t				j;
+	int					first;
 
 	if (!(*tab = ft_strdup("{")))
 		return (0);
 	hm_iter_init(val->obj.data, &it);
-	printf("entering...\n");
+	first = 1;
 	while (hm_iter_next(&it))
 	{
 		if (!(sub = json_to_tab(it.value)))
 			return (0);
-		printf("made sub array!\n");
+		if (!first)
+			*tab = ft_strconcat(*tab, ",", 1);
+		first = 0;
 		j = 0;
 		while (sub[j])
 		{
+			++tab;
+			if (!j)
+				*tab = ft_strconcat("\t", ft_strconcat(json_sfy(it.key), ft_strconcat(": ", *sub, 0), 3), 2);
+			else if (!sub[j + 1])
+				*tab = ft_strconcat("\t", sub[j], 0);
+			else
+				*tab = ft_strconcat("\t\t", sub[j], 0);
+			++j;
 			if (!*tab)
 			{
-				printf("error: !tab.\n");
 				ft_strtabdel(&sub);
 				return (0);
 			}
-			++tab;
-			*tab = !j ? ft_strconcat("\t", ft_strconcat(json_sfy(it.key), ft_strconcat(": ", *sub, 0), 2), 2) :
-				ft_strconcat("\t\t", sub[j], 0);
-			if (!sub[++j])
-				*tab = ft_strconcat(*tab, ",", 1);
 		}
 		ft_strtabdel(&sub);
-		++tab;
 	}
-	if (!(*tab = ft_strdup("}")))
+	if (!(*(tab + (*tab ? 1 : 0)) = ft_strdup("}")))
 		return (0);
-	printf("end!\n");
 	return (1);
 }
 
@@ -70,31 +73,39 @@ static int				json_arr_to_tab(const t_json_value *val, char **tab)
 	size_t				i;
 	char				**sub;
 	size_t				j;
+	int					first;
 
 	if (!(*tab = ft_strdup("[")))
 		return (0);
 	i = 0;
+	first = 1;
 	while (i < val->arr.values_num)
 	{
 		if (!(sub = json_to_tab(val->arr.values[i])))
 			return (0);
+		if (!first)
+			*tab = ft_strconcat(*tab, ",", 1);
+		first = 0;
 		j = 0;
 		while (sub[j])
 		{
+			++tab;
+			if (!j || !sub[j + 1])
+				*tab = ft_strconcat("\t", sub[j], 0);
+			else
+				*tab = ft_strconcat("\t\t", sub[j], 0);
+			++j;
 			if (!*tab)
 			{
 				ft_strtabdel(&sub);
 				return (0);
 			}
-			++tab;
-			*tab = !j ? ft_strdup(*sub) : ft_strconcat("\t", sub[j], 0);
-			if (!sub[++j])
-				*tab = ft_strconcat(*tab, ",", 1);
 		}
 		ft_strtabdel(&sub);
-		++tab;
 		++i;
 	}
+	if (!(*(tab + (*tab ? 1 : 0)) = ft_strdup("]")))
+		return (0);
 	return (1);
 }
 

@@ -6,7 +6,7 @@
 /*   By: yguaye <yguaye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/19 01:26:24 by yguaye            #+#    #+#             */
-/*   Updated: 2018/04/22 16:28:50 by yguaye           ###   ########.fr       */
+/*   Updated: 2018/04/24 01:30:49 by yguaye           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,8 @@ typedef struct			s_json_str_it_str
 	char				is_file;
 	ssize_t				i;
 	char				end;
-	char				*str;
+	char				tabc;
+	const char			*str;
 }						t_json_str_it_str;
 
 typedef struct			s_json_str_it_file
@@ -32,6 +33,8 @@ typedef struct			s_json_str_it_file
 	char				is_file;
 	ssize_t				i;
 	char				end;
+	char				tabc;
+	char				peek;
 	int					fd;
 	ssize_t				data_size;
 	char				data[JRD_PACKET];
@@ -46,7 +49,9 @@ typedef union			u_json_str_it
 t_json_value			*json_make_value(t_json_vtype type);
 
 void					json_init_iterator(t_json_str_it *it, int file,
-		char *path_or_str);
+		const char *path_or_str);
+
+char					json_it_peek(t_json_str_it *it);
 
 char					json_it_next(t_json_str_it *it, t_json_parse_res *res);
 

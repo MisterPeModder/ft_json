@@ -6,7 +6,7 @@
 /*   By: yguaye <yguaye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/11 10:07:33 by yguaye            #+#    #+#             */
-/*   Updated: 2018/04/23 17:07:37 by yguaye           ###   ########.fr       */
+/*   Updated: 2018/04/24 01:42:57 by yguaye           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,8 +70,12 @@ void					json_release_value(t_json_value **val);
 
 /*
 ** json_release_file: frees the passed JSON file.
+**
+** -rel_obj: if 1, then the contained json object will be freed.
+**           Otherwise the object will not be touched, this means YOU will have
+**           to free it manually using json_release_value().
 */
-void					json_release_file(t_json_parse_res **file);
+void					json_release_file(t_json_parse_res **file, int rel_obj);
 
 /*
 ** json_obj_get: gets the value stored at key k in a json OBJECT.
