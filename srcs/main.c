@@ -6,7 +6,7 @@
 /*   By: yguaye <yguaye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/19 01:56:49 by yguaye            #+#    #+#             */
-/*   Updated: 2018/04/21 19:21:36 by yguaye           ###   ########.fr       */
+/*   Updated: 2018/04/23 13:24:43 by yguaye           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ int						main(int argc, char **argv)
 	t_json_str_it		it;
 	t_json_parse_res	res;
 	t_json_value		*obj;
+	char				*str;
 
 	if (argc != 2)
 		return (42);
@@ -30,11 +31,15 @@ int						main(int argc, char **argv)
 	obj = json_parse(&it, 0, 0, &res);
 	if (!obj)
 	{
-		printf("(nil)\n");
+		printf("(null)\n");
 		if (res.err)
 			printf("%s\n", res.err);
 		return (43);
 	}
-	ft_putstr(json_to_str(obj));
+	ft_putstr(str = json_to_str(obj));
+	if (!str)
+		ft_putendl("(null)\nSomething went wrong!");
+	else
+		free(str);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: yguaye <yguaye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/19 01:26:24 by yguaye            #+#    #+#             */
-/*   Updated: 2018/04/21 18:27:04 by yguaye           ###   ########.fr       */
+/*   Updated: 2018/04/22 16:28:50 by yguaye           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,6 @@ t_json_value			*json_lexing(t_json_str_it *it, t_json_parse_res *res);
 
 void					json_set_error(t_json_parse_res *res, char *msg);
 
-t_list					*json_obj_to_lst(const t_json_value *val);
+int						json_val_to_tab(const t_json_value *val, char **tab);
 
 #endif

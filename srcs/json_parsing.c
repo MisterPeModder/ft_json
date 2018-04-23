@@ -6,11 +6,11 @@
 /*   By: yguaye <yguaye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/19 06:09:03 by yguaye            #+#    #+#             */
-/*   Updated: 2018/04/19 16:51:56 by yguaye           ###   ########.fr       */
+/*   Updated: 2018/04/23 13:40:49 by yguaye           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "json_internal.h"
+#include "json.h"
 
 static t_json_value		*json_parse_value(t_json_str_it *it, t_json_value *val,
 		t_json_parse_res *res)
@@ -22,8 +22,6 @@ static t_json_value		*json_parse_value(t_json_str_it *it, t_json_value *val,
 	else
 		return (val);
 }
-
-#include <stdio.h>
 
 static int				json_parse_obj_value(t_json_str_it *it,
 		t_json_value *obj, t_json_value *first, t_json_parse_res *res)
@@ -59,14 +57,23 @@ t_json_value			*json_parse(t_json_str_it *it, char has_parent,
 	t_json_value		*obj;
 	t_json_value		*v;
 	int					has_comma;
+	int					is_begin;
 
 	if (!(obj = json_make_value(JSON_OBJECT)))
 		return (NULL);
 	has_comma = 0;
+	is_begin = 1;
 	while (1)
 	{
 		if (!(v = json_lexing(it, res)))
 			return (NULL);
+		if (is_begin && !has_parent &&
+				v->obj.type == JSON_SPECIAL_CHAR && v->bol.value == '{')
+		{
+			is_begin = 0;
+			json_release_value(&v);
+			continue;
+		}
 		if (v->obj.type == JSON_SPECIAL_CHAR && (
 					(is_array && v->bol.value == ']') ||
 					(!is_array && v->bol.value == '}')))
