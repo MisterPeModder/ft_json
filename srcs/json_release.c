@@ -1,15 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   json_release_value.c                               :+:      :+:    :+:   */
+/*   json_release.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yguaye <yguaye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/19 01:40:49 by yguaye            #+#    #+#             */
-/*   Updated: 2018/04/19 02:13:40 by yguaye           ###   ########.fr       */
+/*   Updated: 2018/04/23 16:22:28 by yguaye           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <libft_base/memory.h>
 #include "json.h"
 
 static void				json_release_value_helper(t_json_value *v)
@@ -35,4 +36,13 @@ void					json_release_value(t_json_value **v)
 {
 	json_release_value_helper(*v);
 	v = NULL;
+}
+
+void					json_release_file(t_json_parse_res **file)
+{
+	if ((*file)->err)
+		free((*file)->err);
+	ft_bzero(*file, sizeof(t_json_parse_res));
+	free(*file);
+	*file = NULL;
 }

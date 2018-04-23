@@ -6,7 +6,7 @@
 /*   By: yguaye <yguaye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/11 10:07:33 by yguaye            #+#    #+#             */
-/*   Updated: 2018/04/19 03:45:09 by yguaye           ###   ########.fr       */
+/*   Updated: 2018/04/23 16:14:10 by yguaye           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,13 +74,24 @@ void					json_release_value(t_json_value **val);
 void					json_release_file(t_json_parse_res **file);
 
 /*
-** json_get_val: gets the value at key k.
+** json_get_val: gets the value stored at key in a json OBJECT.
 **
-** -o: the JSON object to search from.
-** -k: the key;
+** -obj: the json object to search from.
+** -key: the key;
 **
-** returns: a JSON value if found, NULL otherwise.
+** returns: a json value if found, null otherwise.
 */
-t_json_value			*json_get_value(const t_json_object *o, const char *k);
+t_json_value			*json_obj_get_value(const t_json_object *obj,
+		const char *key);
+
+/*
+** json_get_val: gets the value stored at index i in a json ARRAY.
+**
+** -arr: the json array to search from.
+** -i: the index;
+**
+** returns: a json value if found, null otherwise.
+*/
+t_json_value			*json_arr_get_value(const t_json_array *arr, size_t i);
 
 #endif
