@@ -6,7 +6,7 @@
 /*   By: yguaye <yguaye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/19 03:35:29 by yguaye            #+#    #+#             */
-/*   Updated: 2018/04/24 00:33:42 by yguaye           ###   ########.fr       */
+/*   Updated: 2018/04/24 13:18:09 by yguaye           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,6 +151,8 @@ static void				*json_unexpected_char(t_json_parse_res *res, char *str)
 		res->col -= (int)ft_strlen(str);
 	return (json_ret_error(res, "unexpected identifier"));
 }
+
+#include <stdio.h>
 
 t_json_value			*json_lexing(t_json_str_it *it, t_json_parse_res *res)
 {

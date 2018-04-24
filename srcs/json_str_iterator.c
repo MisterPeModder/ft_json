@@ -6,7 +6,7 @@
 /*   By: yguaye <yguaye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/19 02:25:32 by yguaye            #+#    #+#             */
-/*   Updated: 2018/04/24 01:30:55 by yguaye           ###   ########.fr       */
+/*   Updated: 2018/04/24 13:42:48 by yguaye           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 #include <stdio.h>
 
 void					json_init_iterator(t_json_str_it *it, int file,
-		const char *path_or_str)
+		const char *path_or_str, int fd)
 {
 	it->str.i = 0;
 	it->str.is_file = file;
@@ -29,14 +29,13 @@ void					json_init_iterator(t_json_str_it *it, int file,
 	}
 	else
 	{
-		if ((it->file.fd = open(path_or_str, 0)) == -1)
-			it->file.end = 1;
-		else if ((it->file.data_size = read(it->file.fd, it->file.data,
+		it->file.fd = fd;
+		if ((it->file.data_size = read(it->file.fd, it->file.data,
 						JRD_PACKET)) == -1 || it->file.data_size == 0)
 			it->file.end = 1;
 		else
 			it->file.end = 0;
-		it->file.peek = 1;
+		it->file.peek = 0;
 	}
 }
 
@@ -58,7 +57,7 @@ static char				json_it_inc(t_json_parse_res *res, char c, char *tabc)
 		++res->col;
 		*tabc = --*tabc <= 0 ? 4 : *tabc;
 	}
-	return (c);	
+	return (c);
 }
 
 char					json_it_peek(t_json_str_it *it)
@@ -109,17 +108,7 @@ char					json_it_next(t_json_str_it *it, t_json_parse_res *res)
 		if (it->file.data_size < JRD_PACKET &&
 				it->file.i >= it->file.data_size - 1)
 			it->file.end = 1;
-		if (!it->file.peek)
-			return (json_it_inc(res, it->file.data[it->file.i++],
-						&it->str.tabc));
-		it->file.peek = 0;
-		return (json_it_inc(res, it->file.data[it->file.i], &it->str.tabc));
+		return (json_it_inc(res, it->file.data[it->file.i++],
+					&it->str.tabc));
 	}
-}
-
-void					json_close_file(t_json_str_it *it)
-{
-	if (it->file.is_file && it->file.fd != -1)
-		close(it->file.fd);
-	it->str.end = 1;
 }

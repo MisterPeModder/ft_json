@@ -6,7 +6,7 @@
 /*   By: yguaye <yguaye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/19 01:26:24 by yguaye            #+#    #+#             */
-/*   Updated: 2018/04/24 06:09:50 by yguaye           ###   ########.fr       */
+/*   Updated: 2018/04/24 11:55:03 by yguaye           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,13 +49,11 @@ typedef union			u_json_str_it
 t_json_value			*json_make_value(t_json_vtype type);
 
 void					json_init_iterator(t_json_str_it *it, int file,
-		const char *path_or_str);
+		const char *path_or_str, int fd);
 
 char					json_it_peek(t_json_str_it *it);
 
 char					json_it_next(t_json_str_it *it, t_json_parse_res *res);
-
-void					json_close_file(t_json_str_it *it);
 
 t_json_value			*json_ret_error(t_json_parse_res *res, char *msg);
 

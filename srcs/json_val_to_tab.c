@@ -6,7 +6,7 @@
 /*   By: yguaye <yguaye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/22 16:19:07 by yguaye            #+#    #+#             */
-/*   Updated: 2018/04/24 10:39:36 by yguaye           ###   ########.fr       */
+/*   Updated: 2018/04/24 14:25:05 by yguaye           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,8 @@ static int				json_obj_to_tab(const t_json_value *val, char **tab)
 		{
 			++tab;
 			if (!j)
-				*tab = ft_strconcat("\t", ft_strconcat(json_sfy(it.key), ft_strconcat(": ", *sub, 0), 3), 2);
+				*tab = ft_strconcat("\t", ft_strconcat(json_sfy(it.key),
+							ft_strconcat(": ", *sub, 0), 3), 2);
 			else
 				*tab = ft_strconcat("\t", sub[j], 0);
 			++j;
@@ -88,10 +89,7 @@ static int				json_arr_to_tab(const t_json_value *val, char **tab)
 		while (sub[j])
 		{
 			++tab;
-			if (!j || !sub[j + 1])
-				*tab = ft_strconcat("\t", sub[j], 0);
-			else
-				*tab = ft_strconcat("\t\t", sub[j], 0);
+			*tab = ft_strconcat("\t", sub[j], 0);
 			++j;
 			if (!*tab)
 			{
