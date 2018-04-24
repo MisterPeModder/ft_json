@@ -6,7 +6,7 @@
 /*   By: yguaye <yguaye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/19 01:56:49 by yguaye            #+#    #+#             */
-/*   Updated: 2018/04/24 12:47:01 by yguaye           ###   ########.fr       */
+/*   Updated: 2018/04/24 16:04:23 by yguaye           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int						main(int argc, char **argv)
 		if (res)
 		{
 			ft_putendl(res->err ? res->err : "CRITICAL FAILURE");
-			json_release_file(&res, 1);
+			json_release_file(&res, 0);
 		}
 		close(fd);
 		return (43);

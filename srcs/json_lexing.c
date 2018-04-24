@@ -6,7 +6,7 @@
 /*   By: yguaye <yguaye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/19 03:35:29 by yguaye            #+#    #+#             */
-/*   Updated: 2018/04/24 13:18:09 by yguaye           ###   ########.fr       */
+/*   Updated: 2018/04/24 18:39:26 by yguaye           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,19 +122,6 @@ static t_json_value		*json_make_bool(char val)
 	return (r);
 }
 
-static int				json_is_numeric(char *str)
-{
-	if (*str == '-')
-		++str;
-	while (*str)
-	{
-		if (!ft_isdigit(*str))
-			return (0);
-		++str;
-	}
-	return (1);
-}
-
 static t_json_value		*json_make_special_char(char c)
 {
 	t_json_value		*v;
@@ -149,7 +136,7 @@ static void				*json_unexpected_char(t_json_parse_res *res, char *str)
 {
 	if (str)
 		res->col -= (int)ft_strlen(str);
-	return (json_ret_error(res, "unexpected identifier"));
+	return (json_ret_error(res, "unexpected value"));
 }
 
 #include <stdio.h>
@@ -170,7 +157,7 @@ t_json_value			*json_lexing(t_json_str_it *it, t_json_parse_res *res)
 		return (json_lex_str(it, res, 0));
 	else if (json_is_special_char(c))
 		return (json_make_special_char(c));
-	else if (!(str = json_next_str(it, res, c, 0)))
+	else if (!(str = json_next_str(it, res, c, 0)) || !*str)
 		return (NULL);
 	if (ft_strcmp("true", str) == 0)
 		v = json_make_bool(1);
@@ -178,12 +165,8 @@ t_json_value			*json_lexing(t_json_str_it *it, t_json_parse_res *res)
 		v = json_make_bool(0);
 	else if (ft_strcmp("null", str) == 0)
 		v = json_make_value(JSON_NULL);
-	else if (json_is_numeric(str))
-	{
-		if (!(v = json_make_value(JSON_NUMBER)))
-			return (NULL);
-		v->num.value = ft_atoi(str);
-	}
+	else if (ft_isdigit(*str) || *str == '-')
+		v = json_make_number(str, res);
 	free(str);
 	return (v ? v : json_unexpected_char(res, str));
 }

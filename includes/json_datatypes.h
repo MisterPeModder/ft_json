@@ -6,7 +6,7 @@
 /*   By: yguaye <yguaye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/11 10:07:19 by yguaye            #+#    #+#             */
-/*   Updated: 2018/04/24 01:39:18 by yguaye           ###   ########.fr       */
+/*   Updated: 2018/04/24 15:25:53 by yguaye           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,8 @@ typedef enum			e_json_vtype
 {
 	JSON_OBJECT,
 	JSON_STRING,
-	JSON_NUMBER,
+	JSON_INT,
+	JSON_DOUBLE,
 	JSON_ARRAY,
 	JSON_BOOL,
 	JSON_NULL,
@@ -59,15 +60,26 @@ typedef struct			s_json_string
 }						t_json_string;
 
 /*
-** t_json_number: holds a json number that is represented by a double.
+** t_json_int: holds a json number that is represented by a int.
+**
+** the 'value' integer is safe to use and modify.
+*/
+typedef struct			s_json_int
+{
+	t_json_vtype		type;
+	int					value;
+}						t_json_int;
+
+/*
+** t_json_double: holds a json number that is represented by a double.
 **
 ** the 'value' double is safe to use and modify.
 */
-typedef struct			s_json_number
+typedef struct			s_json_double
 {
 	t_json_vtype		type;
 	double				value;
-}						t_json_number;
+}						t_json_double;
 
 /*
 ** t_json_array: the json object structure.
@@ -104,7 +116,8 @@ typedef union			u_json_value
 {
 	t_json_object		obj;
 	t_json_string		str;
-	t_json_number		num;
+	t_json_int			n_i;
+	t_json_double		n_d;
 	t_json_array		arr;
 	t_json_bool			bol;
 }						t_json_value;
