@@ -6,7 +6,7 @@
 /*   By: yguaye <yguaye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/19 01:40:49 by yguaye            #+#    #+#             */
-/*   Updated: 2018/04/24 01:43:59 by yguaye           ###   ########.fr       */
+/*   Updated: 2018/04/24 06:10:38 by yguaye           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,4 +49,10 @@ void					json_release_file(t_json_parse_res **file, int rel_obj)
 	ft_bzero(*file, sizeof(t_json_parse_res));
 	free(*file);
 	*file = NULL;
+}
+
+void					json_rel4lst(void *value, size_t n)
+{
+	(void)n;
+	json_release_value_helper(value);
 }

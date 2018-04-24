@@ -6,7 +6,7 @@
 /*   By: yguaye <yguaye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/11 10:07:33 by yguaye            #+#    #+#             */
-/*   Updated: 2018/04/24 01:42:57 by yguaye           ###   ########.fr       */
+/*   Updated: 2018/04/24 05:03:11 by yguaye           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,12 @@ t_json_parse_res		*json_from_file(const char *path);
 ** json_from_str: parses a string into a JSON object.
 **
 ** -src: the source string.
+** -ignore_extra: tells the parser wheter it ignore checking for extra
+**                non-whitspace characters after the main object.
 **
 ** returns: a t_json_parse_res instance.
 */
-t_json_parse_res		*json_from_str(const char *src);
+t_json_parse_res		*json_from_str(const char *src, int ignore_extra);
 
 /*
 ** json_to_tab: converts the passed JSON value into an array.
