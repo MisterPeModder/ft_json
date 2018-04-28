@@ -6,7 +6,7 @@
 /*   By: yguaye <yguaye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/19 03:35:29 by yguaye            #+#    #+#             */
-/*   Updated: 2018/04/24 18:39:26 by yguaye           ###   ########.fr       */
+/*   Updated: 2018/04/28 16:49:42 by yguaye           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,36 +79,28 @@ static int				json_is_special_char(char c)
 static char				*json_next_str(t_json_str_it *it,
 		t_json_parse_res *res, char begin, int lc)
 {
-	t_list				*lst;
-	t_list				*n;
-	char				c;
 	char				*str;
-	int					i;
+	int					s;
+	char				c;
 
-	lst = ft_lstnew(&begin, sizeof(char));
 	lc = res->col;
-	while (!it->str.end && !ft_isspace(c = json_it_next(it, res)))
-	{
-		if (!(n = ft_lstnew(&c, sizeof(char))))
-			return (NULL);
-		ft_lst_pushback(lst, n);
-		lc = res->col;
-		if (json_is_special_char(c = json_it_peek(it)))
-			break ;
-	}
-	if (!it->str.end && c == '\n')
-		json_lex_str_setback(res, lc);
-	if (!(str = ft_strnew(ft_lstlen(lst))))
+	if (!(str = ft_strnew(30)))
 		return (NULL);
-	n = lst;
-	i = 0;
-	while (n)
+	s = 1;
+	*str = begin;
+	while (!it->str.end && ft_istoken(c = json_it_peek(it)))
 	{
-		str[i++] = *((char *)n->content);
-		n = n->next;
+		lc = res->col;
+		str[s++] = c;
+		if (s >= 30)
+		{
+			free(str);
+			json_set_error(res, "unexpected value");
+			return (NULL);
+		}
+		json_it_next(it, res);
 	}
-	if (lst)
-		ft_lstdel(&lst, (void (*)(void *, size_t))&free);
+	(void)lc;
 	return (str);
 }
 
@@ -138,8 +130,6 @@ static void				*json_unexpected_char(t_json_parse_res *res, char *str)
 		res->col -= (int)ft_strlen(str);
 	return (json_ret_error(res, "unexpected value"));
 }
-
-#include <stdio.h>
 
 t_json_value			*json_lexing(t_json_str_it *it, t_json_parse_res *res)
 {

@@ -6,7 +6,7 @@
 /*   By: yguaye <yguaye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/24 14:53:29 by yguaye            #+#    #+#             */
-/*   Updated: 2018/04/24 21:37:40 by yguaye           ###   ########.fr       */
+/*   Updated: 2018/04/28 20:10:24 by yguaye           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,10 @@ static void				*json_number_check(const char *src, t_json_parse_res *r)
 	if (src[i] == '0' && src[i + 1] && ft_isdigit(src[i + 1]))
 		return (json_ret_error(r, "trailing zero(s)"));
 	else if (src[i] != '0')
-		while (src[++i] && ft_isdigit(src[i]) && src[i] != '0')
+		while (src[++i] && ft_isdigit(src[i]))
 			;
+	else
+		++i;
 	if (!src[i])
 		return (r);
 	if (src[i] == '.')
@@ -54,11 +56,8 @@ static double			json_number_to_dec(double r)
 	return (r);
 }
 
-#include <stdio.h>
-
 static double			json_num_get_exp(const char *src)
 {
-	printf("exp: '%c'\n", *src);
 	while (*src && (*src != 'E' || *src != 'e'))
 		++src;
 	if (!*src || !*(src + 1))
@@ -66,17 +65,11 @@ static double			json_num_get_exp(const char *src)
 	return (pow(10., (double)atoi(src + 1)));
 }
 
-/*
-** TODO: for some reason, the string src doesn't contain the full number...
-**       Find out why.
-*/
-
 t_json_value			*json_make_number(const char *src, t_json_parse_res *r)
 {
 	int					e_part;
 	t_json_value		*num;
 
-	printf("source: \"%s\"\n", src);
 	if (!json_number_check(src, r))
 		return (NULL);
 	e_part = ft_atoi(src);
@@ -87,14 +80,14 @@ t_json_value			*json_make_number(const char *src, t_json_parse_res *r)
 		if (!(num = json_make_value(JSON_DOUBLE)))
 			return (NULL);
 		num->n_d.value = ((double)e_part) + json_number_to_dec(ft_atoi(src));
-		num->n_d.value *= json_num_get_exp(src);
+		num->n_d.value *= (double)json_num_get_exp(src);
 	}
 	else
 	{
 		if (!(num = json_make_value(JSON_INT)))
 			return (NULL);
 		num->n_i.value = e_part;
-		printf("int: e_part = %i\n", e_part);
+		/*printf("int: e_part = %i, exponent: %f\n", e_part, json_num_get_exp(src));*/
 		num->n_i.value *= json_num_get_exp(src);
 	}
 	return (num);

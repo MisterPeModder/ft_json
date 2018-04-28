@@ -6,7 +6,7 @@
 /*   By: yguaye <yguaye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/19 02:25:32 by yguaye            #+#    #+#             */
-/*   Updated: 2018/04/24 13:42:48 by yguaye           ###   ########.fr       */
+/*   Updated: 2018/04/28 20:10:42 by yguaye           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 #include <unistd.h>
 #include <libft_base/memory.h>
 #include "json_internal.h"
-#include <stdio.h>
 
 void					json_init_iterator(t_json_str_it *it, int file,
 		const char *path_or_str, int fd)

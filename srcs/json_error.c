@@ -6,7 +6,7 @@
 /*   By: yguaye <yguaye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/19 04:08:33 by yguaye            #+#    #+#             */
-/*   Updated: 2018/04/24 00:30:12 by yguaye           ###   ########.fr       */
+/*   Updated: 2018/04/28 15:37:01 by yguaye           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 
 void					json_set_error(t_json_parse_res *res, char *msg)
 {
+	if (res->err)
+		return ;
 	res->err = ft_strconcat(ft_strconcat(ft_strconcat(ft_strconcat(ft_strconcat(
 							"JSON parsing error at line ",
 							ft_itoa(res->line), 2), " col ", 1),

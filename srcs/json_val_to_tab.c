@@ -6,12 +6,11 @@
 /*   By: yguaye <yguaye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/22 16:19:07 by yguaye            #+#    #+#             */
-/*   Updated: 2018/04/24 15:36:18 by yguaye           ###   ########.fr       */
+/*   Updated: 2018/04/28 20:10:56 by yguaye           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <libft_base/stringft.h>
-#include <stdio.h>
 #include "json.h"
 
 static char				*json_sfy(char *str)
