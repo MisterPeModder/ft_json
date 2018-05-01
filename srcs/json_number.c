@@ -6,7 +6,7 @@
 /*   By: yguaye <yguaye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/24 14:53:29 by yguaye            #+#    #+#             */
-/*   Updated: 2018/04/28 20:10:24 by yguaye           ###   ########.fr       */
+/*   Updated: 2018/04/30 00:00:34 by yguaye           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,32 +65,29 @@ static double			json_num_get_exp(const char *src)
 	return (pow(10., (double)atoi(src + 1)));
 }
 
-t_json_value			*json_make_number(const char *src, t_json_parse_res *r)
+int						json_make_number(t_json_value *num, const char *src,
+		t_json_parse_res *r)
 {
 	int					e_part;
-	t_json_value		*num;
 
 	if (!json_number_check(src, r))
-		return (NULL);
+		return (0);
 	e_part = ft_atoi(src);
 	while (*src || *src == '.')
 		++src;
 	if (*(src - 1) == '.')
 	{
-		if (!(num = json_make_value(JSON_DOUBLE)))
-			return (NULL);
+		num->n_d.type = JSON_DOUBLE;
 		num->n_d.value = ((double)e_part) + json_number_to_dec(ft_atoi(src));
 		num->n_d.value *= (double)json_num_get_exp(src);
 	}
 	else
 	{
-		if (!(num = json_make_value(JSON_INT)))
-			return (NULL);
+		num->n_i.type = JSON_INT;
 		num->n_i.value = e_part;
-		/*printf("int: e_part = %i, exponent: %f\n", e_part, json_num_get_exp(src));*/
 		num->n_i.value *= json_num_get_exp(src);
 	}
-	return (num);
+	return (1);
 }
 
 char					*json_double_to_str(double num)

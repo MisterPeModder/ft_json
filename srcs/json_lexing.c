@@ -6,13 +6,14 @@
 /*   By: yguaye <yguaye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/19 03:35:29 by yguaye            #+#    #+#             */
-/*   Updated: 2018/04/28 16:49:42 by yguaye           ###   ########.fr       */
+/*   Updated: 2018/04/30 01:35:57 by yguaye           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <libft_base/list.h>
+#include <libft_base/memory.h>
 #include <libft_base/stringft.h>
 #include <libft_base/character.h>
-#include <libft_base/list.h>
 #include "json.h"
 
 static int				json_lex_str_setback(t_json_parse_res *res, int lc)
@@ -22,17 +23,22 @@ static int				json_lex_str_setback(t_json_parse_res *res, int lc)
 	return (1);
 }
 
-static t_json_value		*json_lex_str(t_json_str_it *it, t_json_parse_res *res,
-		int lc)
+static int				json_lex_str_err(t_list *lst)
 {
-	t_json_value		*v;
+	if (lst)
+		ft_lstdel(&lst, (void (*)(void *, size_t))&free);
+	return (0);
+}
+
+static int				json_lex_str(t_json_value *v, t_json_str_it *it,
+		t_json_parse_res *res, int lc)
+{
 	char				c;
 	t_list				*lst;
 	t_list				*n;
 	int					i;
 
-	if (!(v = json_make_value(JSON_STRING)))
-		return (NULL);
+	json_init_value(v, JSON_STRING);
 	i = 0;
 	lst = NULL;
 	while (!it->str.end)
@@ -42,7 +48,7 @@ static t_json_value		*json_lex_str(t_json_str_it *it, t_json_parse_res *res,
 		if (c == '"')
 		{
 			if (!(v->str.value = ft_strnew(ft_lstlen(lst))))
-				return (NULL);
+				return (json_lex_str_err(lst));
 			n = lst;
 			i = 0;
 			while (n)
@@ -51,22 +57,21 @@ static t_json_value		*json_lex_str(t_json_str_it *it, t_json_parse_res *res,
 				n = n->next;
 			}
 			ft_lstdel(&lst, (void (*)(void *, size_t))&free);
-			return (v);
+			return (1);
 		}
 		if (c == '\n' && json_lex_str_setback(res, lc))
 			break ;
 		if (!(n = ft_lstnew(&c, sizeof(char))))
-			return (NULL);
+			return (json_lex_str_err(lst));
 		if (!lst)
 			lst = n;
 		else
 			ft_lst_pushback(lst, n);
 	}
-	if (lst)
-		ft_lstdel(&lst, (void (*)(void *, size_t))&free);
+	json_lex_str_err(lst);
 	json_release_value(&v);
 	json_set_error(res, "unclosed string");
-	return (NULL);
+	return (0);
 }
 
 static int				json_is_special_char(char c)
@@ -76,87 +81,82 @@ static int				json_is_special_char(char c)
 			|| c == ':' || c == ',');
 }
 
-static char				*json_next_str(t_json_str_it *it,
-		t_json_parse_res *res, char begin, int lc)
+static int				json_next_token(char *str, t_json_str_it *it,
+		t_json_parse_res *res, char begin)
 {
-	char				*str;
 	int					s;
 	char				c;
 
-	lc = res->col;
-	if (!(str = ft_strnew(30)))
-		return (NULL);
 	s = 1;
+	ft_bzero(str, 31);
 	*str = begin;
 	while (!it->str.end && ft_istoken(c = json_it_peek(it)))
 	{
-		lc = res->col;
 		str[s++] = c;
 		if (s >= 30)
-		{
-			free(str);
-			json_set_error(res, "unexpected value");
-			return (NULL);
-		}
+			return (json_ret_errorv(res, "unexpected value"));
 		json_it_next(it, res);
 	}
-	(void)lc;
-	return (str);
+	return (1);
 }
 
-static t_json_value		*json_make_bool(char val)
+static int				json_mksimple(t_json_value *v, char c, t_json_vtype t)
 {
-	t_json_value		*r;
-
-	if (!(r = json_make_value(JSON_BOOL)))
-		return (NULL);
-	r->bol.value = val;
-	return (r);
-}
-
-static t_json_value		*json_make_special_char(char c)
-{
-	t_json_value		*v;
-
-	if (!(v = json_make_value(JSON_SPECIAL_CHAR)))
-		return (NULL);
+	v->bol.type = t;
 	v->bol.value = c;
-	return (v);
+	return (1);
 }
 
-static void				*json_unexpected_char(t_json_parse_res *res, char *str)
+static int				json_from_token(t_json_value *v, const char *str)
+{
+	if (ft_strcmp("true", str) == 0)
+		return (json_mksimple(v, 1, JSON_BOOL));
+	else if (ft_strcmp("false", str) == 0)
+		return (json_mksimple(v, 0, JSON_BOOL));
+	else if (ft_strcmp("null", str) == 0)
+		return (json_mksimple(v, 0, JSON_NULL));
+	return (0);
+}
+
+static int				json_unexpected_char(t_json_parse_res *res, char *str)
 {
 	if (str)
 		res->col -= (int)ft_strlen(str);
-	return (json_ret_error(res, "unexpected value"));
+	return (json_ret_errorv(res, "unexpected value"));
 }
 
-t_json_value			*json_lexing(t_json_str_it *it, t_json_parse_res *res)
+#include <stdio.h> /*DEBUG*/
+
+int						json_lexing(t_json_value *v, t_json_str_it *it,
+		t_json_parse_res *res, int init)
 {
-	t_json_value		*v;
 	char				c;
-	char				*str;
+	char				str[31];
 
 	c = 0;
-	v = NULL;
+	if (!init)
+	{
+		printf("type: %d\n", v->str.type);
+		fflush(stdout);
+		if (v->str.type == JSON_STRING)
+			printf("previous str: \"%s\"\n", v->str.value);
+		json_release_data(v);
+		if (v->str.type == JSON_STRING)
+			printf("previous str: \"%s\"\n", v->str.value);
+	}
 	while (!it->str.end && ft_isspace(c = json_it_next(it, res)))
 		;
 	if ((ft_isspace(c) || !c) && it->str.end)
-		return (json_ret_error(res, "unexpected end of file"));
+		return (json_ret_errorv(res, "unexpected end of file"));
 	else if (c == '"')
-		return (json_lex_str(it, res, 0));
+		return (json_lex_str(v, it, res, 0));
 	else if (json_is_special_char(c))
-		return (json_make_special_char(c));
-	else if (!(str = json_next_str(it, res, c, 0)) || !*str)
-		return (NULL);
-	if (ft_strcmp("true", str) == 0)
-		v = json_make_bool(1);
-	else if (ft_strcmp("false", str) == 0)
-		v = json_make_bool(0);
-	else if (ft_strcmp("null", str) == 0)
-		v = json_make_value(JSON_NULL);
+		return (json_mksimple(v, c, JSON_SPECIAL_CHAR));
+	else if (!json_next_token(str, it, res, c))
+		return (0);
+	else if (json_from_token(v, str))
+		return (1);
 	else if (ft_isdigit(*str) || *str == '-')
-		v = json_make_number(str, res);
-	free(str);
-	return (v ? v : json_unexpected_char(res, str));
+		return (json_make_number(v, str, res));
+	return (json_unexpected_char(res, str));
 }

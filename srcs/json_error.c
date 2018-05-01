@@ -6,7 +6,7 @@
 /*   By: yguaye <yguaye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/19 04:08:33 by yguaye            #+#    #+#             */
-/*   Updated: 2018/04/28 15:37:01 by yguaye           ###   ########.fr       */
+/*   Updated: 2018/04/29 21:47:03 by yguaye           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,4 +27,10 @@ t_json_value			*json_ret_error(t_json_parse_res *res, char *msg)
 {
 	json_set_error(res, msg);
 	return (NULL);
+}
+
+int						json_ret_errorv(t_json_parse_res *res, char *msg)
+{
+	json_set_error(res, msg);
+	return (0);
 }

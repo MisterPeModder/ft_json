@@ -6,11 +6,12 @@
 /*   By: yguaye <yguaye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/19 06:09:03 by yguaye            #+#    #+#             */
-/*   Updated: 2018/04/28 19:20:45 by yguaye           ###   ########.fr       */
+/*   Updated: 2018/04/30 01:35:35 by yguaye           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <libft_base/list.h>
+#include <libft_base/memory.h>
 #include "json.h"
 
 static int				json_is_special(t_json_value *val, char c)
@@ -22,63 +23,35 @@ static t_json_value		*json_parse_value(t_json_str_it *it, t_json_value *val,
 		t_json_parse_res *res)
 {
 	if (json_is_special(val, '{'))
-	{
-		json_release_value(&val);
 		return (json_parse_object(it, 1, res));
-	}
 	else if (json_is_special(val, '['))
-	{
-		json_release_value(&val);
 		return (json_parse_array(it, res));
-	}
-	else
-		return (val);
+	return (ft_memdup(val, sizeof(t_json_value)));
 }
 
 static int				json_parse_obj_value(t_json_str_it *it,
 		t_json_value *obj, t_json_value *first, t_json_parse_res *res)
 {
-	t_json_value		*second;
+	t_json_value		second;
 	t_json_value		*v;
 
 	if (first->obj.type != JSON_STRING)
-	{
-		json_set_error(res, "non-string keys are not allowed!");
-		json_release_value(&first);
+		return (json_ret_errorv(res, "non-string keys are not allowed!"));
+	if (!json_lexing(&second, it, res, 1))
 		return (0);
-	}
-	if (!(second = json_lexing(it, res)))
-	{
-		json_release_value(&first);
+	if (!json_is_special(&second, ':'))
+		return (json_ret_errorv(res, "must have colon ':' after key"));
+	if (!json_lexing(&second, it, res, 0))
 		return (0);
-	}
-	if (second->obj.type != JSON_SPECIAL_CHAR || second->bol.value != ':')
-	{
-		json_release_value(&first);
-		json_release_value(&second);
-		json_set_error(res, "must have colon ':' after key");
+	if (!(v = json_parse_value(it, &second, res)))
 		return (0);
-	}
-	json_release_value(&second);
-	if (!(second = json_lexing(it, res)))
-	{
-		json_release_value(&first);
-		return (0);
-	}
-	if (!(v = json_parse_value(it, second, res)))
-	{
-		json_release_value(&first);
-		return (0);
-	}
 	if (hm_get(obj->obj.data, first->str.value))
 	{
 		json_set_error(res, "cannot use the same key twice!");
-		json_release_value(&first);
 		json_release_value(&v);
 		return (0);
 	}
 	hm_put(obj->obj.data, first->str.value, v);
-	json_release_value(&first);
 	return (1);
 }
 
@@ -100,62 +73,57 @@ static int				json_parse_arr_value(t_json_str_it *it,
 	return (1);
 }
 
+#include <stdio.h> /*DEBUG*/
+
 t_json_value			*json_parse_object(t_json_str_it *it, int has_parent,
 		t_json_parse_res *res)
 {
 	t_json_value		*obj;
-	t_json_value		*v;
+	t_json_value		v;
 	int					is_begin;
 
+	if (!json_lexing(&v, it, res, 1))
+		return (NULL);
 	if (!(obj = json_make_value(JSON_OBJECT)))
 		return (NULL);
-	if (!(v = json_lexing(it, res)))
-		return (NULL);
-	if (has_parent && json_is_special(v, '}'))
-	{
-		json_release_value(&v);
+	if (has_parent && json_is_special(&v, '}'))
 		return (obj);
-	}
 	is_begin = 1;
-	while (!json_is_special(v, '}'))
+	while (!json_is_special(&v, '}'))
 	{
-		if (is_begin && !has_parent && json_is_special(v, '{'))
+		if (is_begin && !has_parent && json_is_special(&v, '{'))
 		{
-			json_release_value(&v);
 			is_begin = 0;
-			if (!(v = json_lexing(it, res)))
+			if (!json_lexing(&v, it, res, 0))
+			{
+				json_release_value(&obj);
 				return (NULL);
+			}
 		}
 		else if (is_begin && !has_parent)
 		{
-			json_release_value(&v);
 			json_release_value(&obj);
 			return (json_ret_error(res, "main object must start with '{'"));
 		}
-		if (!json_is_special(v, '}') && (!json_parse_obj_value(it, obj, v, res)
-					|| !(v = json_lexing(it, res))))
+		if (!json_is_special(&v, '}') && (!json_parse_obj_value(it, obj, &v, res)
+					|| !json_lexing(&v, it, res, 0)))
 		{
 			json_release_value(&obj);
 			return (NULL);
 		}
-		if (!json_is_special(v, ','))
+		if (!json_is_special(&v, ','))
 		{
-			if (json_is_special(v, '}'))
-			{
-				json_release_value(&v);
+			if (json_is_special(&v, '}'))
 				return (obj);
-			}
 			json_release_value(&obj);
-			json_release_value(&v);
 			--res->line;
+			json_release_data(&v);
 			return (json_ret_error(res, "missing comma ','"));
 		}
-		json_release_value(&v);
-		if (!(v = json_lexing(it, res)))
+		if (!json_lexing(&v, it, res, 0))
 			return (NULL);
 	}
 	json_release_value(&obj);
-	json_release_value(&v);
 	return (json_ret_error(res, "cannot have comma ',' on last element"));
 }
 
@@ -178,7 +146,7 @@ static t_json_value		*json_convert_lst2arr(t_list *elems)
 		return (NULL);
 	}
 	n = elems;
-	i = arr->arr.values_num - 1;;
+	i = arr->arr.values_num - 1;
 	while (n)
 	{
 		arr->arr.values[i--] = n->content;
@@ -191,44 +159,35 @@ static t_json_value		*json_convert_lst2arr(t_list *elems)
 t_json_value			*json_parse_array(t_json_str_it *it,
 		t_json_parse_res *res)
 {
-	t_json_value		*v;
+	t_json_value		v;
 	t_list				*elems;
 
-	v = NULL;
-	if (!(v = json_lexing(it, res)))
+	if (!json_lexing(&v, it, res, 1))
 		return (NULL);
-	if (json_is_special(v, ']'))
-	{
-		json_release_value(&v);
+	if (json_is_special(&v, ']'))
 		return (json_make_value(JSON_ARRAY));
-	}
 	elems = NULL;
-	while (!json_is_special(v, ']'))
+	while (!json_is_special(&v, ']'))
 	{
-		if (!json_is_special(v, ']') &&
-				(!json_parse_arr_value(it, &elems, v, res) ||
-				 !(v = json_lexing(it, res))))
+		if (!json_is_special(&v, ']') &&
+				(!json_parse_arr_value(it, &elems, &v, res) ||
+				 !json_lexing(&v, it, res, 0)))
 		{
 			ft_lstdel(&elems, &json_rel4lst);
 			return (NULL);
 		}
-		if (!json_is_special(v, ','))
+		if (!json_is_special(&v, ','))
 		{
-			if (json_is_special(v, ']'))
-			{
-				json_release_value(&v);
+			if (json_is_special(&v, ']'))
 				return (json_convert_lst2arr(elems));
-			}
 			ft_lstdel(&elems, &json_rel4lst);
-			json_release_value(&v);
 			--res->line;
+			json_release_data(&v);
 			return (json_ret_error(res, "missing comma ','"));
 		}
-		json_release_value(&v);
-		if (!(v = json_lexing(it, res)))
+		if (!json_lexing(&v, it, res, 0))
 			return (NULL);
 	}
-	json_release_value(&v);
 	ft_lstdel(&elems, &json_rel4lst);
 	return (json_ret_error(res, "cannot have comma ',' on last element"));
 }
