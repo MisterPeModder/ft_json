@@ -6,73 +6,14 @@
 /*   By: yguaye <yguaye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/19 03:35:29 by yguaye            #+#    #+#             */
-/*   Updated: 2018/05/03 13:16:08 by yguaye           ###   ########.fr       */
+/*   Updated: 2018/05/03 13:38:10 by yguaye           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <libft_base/list.h>
 #include <libft_base/memory.h>
 #include <libft_base/stringft.h>
 #include <libft_base/character.h>
 #include "json.h"
-
-static int				json_lex_str_setback(t_json_parse_res *res, int lc)
-{
-	res->col = lc;
-	--res->line;
-	return (1);
-}
-
-static int				json_lex_str_err(t_list *lst)
-{
-	if (lst)
-		ft_lstdel(&lst, (void (*)(void *, size_t))&free);
-	return (0);
-}
-
-static int				json_lex_str(t_json_value *v, t_json_str_it *it,
-		t_json_parse_res *res, int lc)
-{
-	char				c;
-	t_list				*lst;
-	t_list				*n;
-	int					i;
-
-	json_init_value(v, JSON_STRING);
-	i = 0;
-	lst = NULL;
-	while (!it->str.end)
-	{
-		lc = res->col;
-		c = json_it_next(it, res);
-		if (c == '"')
-		{
-			if (!(v->str.value = ft_strnew(ft_lstlen(lst))))
-				return (json_lex_str_err(lst));
-			n = lst;
-			i = 0;
-			while (n)
-			{
-				v->str.value[i++] = *((char *)n->content);
-				n = n->next;
-			}
-			ft_lstdel(&lst, (void (*)(void *, size_t))&free);
-			return (1);
-		}
-		if (c == '\n' && json_lex_str_setback(res, lc))
-			break ;
-		if (!(n = ft_lstnew(&c, sizeof(char))))
-			return (json_lex_str_err(lst));
-		if (!lst)
-			lst = n;
-		else
-			ft_lst_pushback(lst, n);
-	}
-	json_lex_str_err(lst);
-	json_release(&v);
-	json_set_error(res, "unclosed string");
-	return (0);
-}
 
 static int				json_is_special_char(char c)
 {
