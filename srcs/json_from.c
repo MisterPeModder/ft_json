@@ -6,7 +6,7 @@
 /*   By: yguaye <yguaye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/24 01:26:18 by yguaye            #+#    #+#             */
-/*   Updated: 2018/04/24 11:54:16 by yguaye           ###   ########.fr       */
+/*   Updated: 2018/05/03 08:25:23 by yguaye           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,8 @@ static t_json_parse_res	*json_check_after_main(t_json_parse_res *res,
 		t_json_str_it *it)
 {
 	while (!it->str.end)
-		if (!ft_isspace(json_it_next(it, res)))
+		if (!ft_isspace(json_it_next(it, res)) && json_release(&res->obj))
 		{
-			json_release_value(&res->obj);
 			json_set_error(res, "Non-whitespace characters are not allowed"
 					" after main object");
 			return (res);

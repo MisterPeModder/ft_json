@@ -6,7 +6,7 @@
 /*   By: yguaye <yguaye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/19 01:40:49 by yguaye            #+#    #+#             */
-/*   Updated: 2018/04/30 01:35:46 by yguaye           ###   ########.fr       */
+/*   Updated: 2018/05/03 13:16:12 by yguaye           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,12 +33,12 @@ static void				json_release_value_helper(t_json_value *v)
 	free(v);
 }
 
-void					json_release_data(t_json_value *v)
+int					json_rd(t_json_value *v)
 {
 	size_t				i;
 
 	if (!v)
-		return ;
+		return (1);
 	if (v->str.type == JSON_STRING && v->str.value)
 		ft_strdel(&v->str.value);
 	else if (v->obj.type == JSON_OBJECT && v->obj.data)
@@ -51,14 +51,17 @@ void					json_release_data(t_json_value *v)
 				json_release_value_helper(v->arr.values[i - 1]);
 		ft_memdel((void **)&v->arr.values);
 	}
+	v->obj.type = JSON_NULL;
+	return (1);
 }
 
-void					json_release_value(t_json_value **v)
+int						json_release(t_json_value **v)
 {
 	if (!v || !*v)
-		return ;
+		return (1);
 	json_release_value_helper(*v);
 	*v = NULL;
+	return (1);
 }
 
 void					json_release_file(t_json_parse_res **file, int rel_obj)
@@ -66,7 +69,7 @@ void					json_release_file(t_json_parse_res **file, int rel_obj)
 	if ((*file)->err)
 		free((*file)->err);
 	if (rel_obj && (*file)->obj)
-		json_release_value(&(*file)->obj);
+		json_release(&(*file)->obj);
 	ft_bzero(*file, sizeof(t_json_parse_res));
 	free(*file);
 	*file = NULL;

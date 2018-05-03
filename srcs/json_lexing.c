@@ -6,7 +6,7 @@
 /*   By: yguaye <yguaye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/19 03:35:29 by yguaye            #+#    #+#             */
-/*   Updated: 2018/04/30 01:35:57 by yguaye           ###   ########.fr       */
+/*   Updated: 2018/05/03 13:16:08 by yguaye           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ static int				json_lex_str(t_json_value *v, t_json_str_it *it,
 			ft_lst_pushback(lst, n);
 	}
 	json_lex_str_err(lst);
-	json_release_value(&v);
+	json_release(&v);
 	json_set_error(res, "unclosed string");
 	return (0);
 }
@@ -125,8 +125,6 @@ static int				json_unexpected_char(t_json_parse_res *res, char *str)
 	return (json_ret_errorv(res, "unexpected value"));
 }
 
-#include <stdio.h> /*DEBUG*/
-
 int						json_lexing(t_json_value *v, t_json_str_it *it,
 		t_json_parse_res *res, int init)
 {
@@ -135,15 +133,7 @@ int						json_lexing(t_json_value *v, t_json_str_it *it,
 
 	c = 0;
 	if (!init)
-	{
-		printf("type: %d\n", v->str.type);
-		fflush(stdout);
-		if (v->str.type == JSON_STRING)
-			printf("previous str: \"%s\"\n", v->str.value);
-		json_release_data(v);
-		if (v->str.type == JSON_STRING)
-			printf("previous str: \"%s\"\n", v->str.value);
-	}
+		json_rd(v);
 	while (!it->str.end && ft_isspace(c = json_it_next(it, res)))
 		;
 	if ((ft_isspace(c) || !c) && it->str.end)

@@ -6,7 +6,7 @@
 /*   By: yguaye <yguaye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/11 10:07:33 by yguaye            #+#    #+#             */
-/*   Updated: 2018/04/24 11:52:55 by yguaye           ###   ########.fr       */
+/*   Updated: 2018/05/03 08:18:11 by yguaye           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,8 +69,10 @@ int						json_to_file(const t_json_object *obj, const char *p);
 
 /*
 ** json_release_value: frees the passed JSON value.
+**
+** returns: always 1 to allow chaining.
 */
-void					json_release_value(t_json_value **val);
+int						json_release(t_json_value **val);
 
 /*
 ** json_release_file: frees the passed JSON file.

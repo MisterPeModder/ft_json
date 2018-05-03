@@ -6,7 +6,7 @@
 /*   By: yguaye <yguaye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/19 01:26:24 by yguaye            #+#    #+#             */
-/*   Updated: 2018/04/30 00:27:04 by yguaye           ###   ########.fr       */
+/*   Updated: 2018/05/03 08:13:02 by yguaye           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,6 @@ int						json_make_number(t_json_value *v, const char *src,
 
 char					*json_double_to_str(double num);
 
-void					json_release_data(t_json_value *v);
+int						json_rd(t_json_value *v);
 
 #endif
