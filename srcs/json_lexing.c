@@ -6,7 +6,7 @@
 /*   By: yguaye <yguaye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/19 03:35:29 by yguaye            #+#    #+#             */
-/*   Updated: 2018/05/03 13:38:10 by yguaye           ###   ########.fr       */
+/*   Updated: 2018/05/04 15:14:33 by yguaye           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,33 @@ static int				json_unexpected_char(t_json_parse_res *res, char *str)
 	return (json_ret_errorv(res, "unexpected value"));
 }
 
+static char				json_skip(t_json_str_it *it, t_json_parse_res *res)
+{
+	char				c;
+
+	c = 0;
+	while (!it->str.end && ft_isspace(c = json_it_next(it, res)))
+		;
+	if (c == '/')
+	{
+		c = json_it_next(it, res);
+		if (c == '/')
+			while (!it->str.end && (c = json_it_next(it, res)) != '\n')
+				;
+		else if (c == '*')
+		{
+			while (!it->str.end && !((c = json_it_next(it, res)) == '*'
+						&& json_it_peek(it) == '/'))
+				;
+			c = json_it_next(it, res);
+		}
+		return (json_skip(it, res));
+	}
+	if ((ft_isspace(c) || !c) && it->str.end)
+		return (json_ret_errorv(res, "unexpected end of file"));
+	return (c);
+}
+
 int						json_lexing(t_json_value *v, t_json_str_it *it,
 		t_json_parse_res *res, int init)
 {
@@ -75,10 +102,8 @@ int						json_lexing(t_json_value *v, t_json_str_it *it,
 	c = 0;
 	if (!init)
 		json_rd(v);
-	while (!it->str.end && ft_isspace(c = json_it_next(it, res)))
-		;
-	if ((ft_isspace(c) || !c) && it->str.end)
-		return (json_ret_errorv(res, "unexpected end of file"));
+	if (!(c = json_skip(it, res)))
+		return (0);
 	else if (c == '"')
 		return (json_lex_str(v, it, res, 0));
 	else if (json_is_special_char(c))
