@@ -6,24 +6,12 @@
 /*   By: yguaye <yguaye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/22 16:19:07 by yguaye            #+#    #+#             */
-/*   Updated: 2018/04/28 20:10:56 by yguaye           ###   ########.fr       */
+/*   Updated: 2018/05/04 16:37:43 by yguaye           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <libft_base/stringft.h>
 #include "json.h"
-
-static char				*json_sfy(char *str)
-{
-	char				*ret;
-
-	if (!(ret = ft_strnew(ft_strlen(str) + 2)))
-		return (NULL);
-	*ret = '"';
-	ft_strcat(ret, str);
-	ft_strcat(ret, "\"");
-	return (ret);
-}
 
 static int				json_obj_to_tab(const t_json_value *val, char **tab)
 {
@@ -48,7 +36,7 @@ static int				json_obj_to_tab(const t_json_value *val, char **tab)
 		{
 			++tab;
 			if (!j)
-				*tab = ft_strconcat("\t", ft_strconcat(json_sfy(it.key),
+				*tab = ft_strconcat("\t", ft_strconcat(json_stringify(it.key),
 							ft_strconcat(": ", *sub, 0), 3), 2);
 			else
 				*tab = ft_strconcat("\t", sub[j], 0);
@@ -111,7 +99,7 @@ int						json_val_to_tab(const t_json_value *val, char **tab)
 	else if (val->obj.type == JSON_ARRAY)
 		return (json_arr_to_tab(val, tab));
 	else if (val->obj.type == JSON_STRING)
-		*tab = ft_strconcat("\"", ft_strconcat(val->str.value, "\"", 0), 2);
+		*tab = json_stringify(val->str.value);
 	else if (val->obj.type == JSON_INT)
 		*tab = ft_itoa(val->n_i.value);
 	else if (val->obj.type == JSON_DOUBLE)

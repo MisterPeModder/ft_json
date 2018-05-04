@@ -6,7 +6,7 @@
 /*   By: yguaye <yguaye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/19 01:26:24 by yguaye            #+#    #+#             */
-/*   Updated: 2018/05/03 13:37:05 by yguaye           ###   ########.fr       */
+/*   Updated: 2018/05/04 16:06:43 by yguaye           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,5 +85,7 @@ int						json_rd(t_json_value *v);
 
 int						json_lex_str(t_json_value *v, t_json_str_it *it,
 		t_json_parse_res *res, int lc);
+
+char					*json_stringify(const char *src);
 
 #endif
