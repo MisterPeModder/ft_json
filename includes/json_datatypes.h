@@ -6,7 +6,7 @@
 /*   By: yguaye <yguaye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/11 10:07:19 by yguaye            #+#    #+#             */
-/*   Updated: 2018/04/24 15:25:53 by yguaye           ###   ########.fr       */
+/*   Updated: 2018/05/04 17:10:05 by yguaye           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ typedef enum			e_json_vtype
 	JSON_SPECIAL_CHAR
 }						t_json_vtype;
 
-union					u_json_value;
+union u_json_value;
 
 /*
 ** t_json_object: the json object structure.
