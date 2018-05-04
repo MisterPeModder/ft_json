@@ -6,7 +6,7 @@
 /*   By: yguaye <yguaye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/19 01:56:49 by yguaye            #+#    #+#             */
-/*   Updated: 2018/05/04 16:59:07 by yguaye           ###   ########.fr       */
+/*   Updated: 2018/05/04 23:43:05 by yguaye           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int						main(int argc, char **argv)
 		perror("JSON parser: couldn't open file");
 		return (11);
 	}
-	res = json_from_file(fd, 1);
+	res = json_from_file(fd, JFLAG_ALLOW_COMMENTS);
 	if (!res || !res->obj)
 	{
 		if (res)

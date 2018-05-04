@@ -6,7 +6,7 @@
 /*   By: yguaye <yguaye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/19 16:54:23 by yguaye            #+#    #+#             */
-/*   Updated: 2018/04/24 01:07:51 by yguaye           ###   ########.fr       */
+/*   Updated: 2018/05/04 23:39:26 by yguaye           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include <libft_base/memory.h>
 #include <libft_base/stringft.h>
 #include "json.h"
+#include "json_internal.h"
 
 static size_t			json_count_ln(const t_json_value *val)
 {

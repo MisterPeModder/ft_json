@@ -6,7 +6,7 @@
 /*   By: yguaye <yguaye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/19 03:35:29 by yguaye            #+#    #+#             */
-/*   Updated: 2018/05/04 21:43:51 by yguaye           ###   ########.fr       */
+/*   Updated: 2018/05/04 23:01:35 by yguaye           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include <libft_base/stringft.h>
 #include <libft_base/character.h>
 #include "json.h"
+#include "json_internal.h"
 
 static int				json_next_token(char *str, t_json_str_it *it,
 		t_json_parse_res *res, char begin)
@@ -61,6 +62,8 @@ static char				json_skip(t_json_str_it *it, t_json_parse_res *res)
 		;
 	if (c == '/')
 	{
+		if (!(res->flags & JFLAG_ALLOW_COMMENTS) && (c == '/' || c == '*'))
+			return (json_ret_errorv(res, "JSON does not support comments"));
 		c = json_it_next(it, res);
 		if (c == '/')
 			while (!it->str.end && (c = json_it_next(it, res)) != '\n')
@@ -102,5 +105,5 @@ int						json_lexing(t_json_value *v, t_json_str_it *it,
 	else if (ft_isdigit(*str) || *str == '-')
 		return (json_make_number(v, str, res));
 	res->col -= (int)ft_strlen(str) - 1;
-	return (json_ret_errorv(res, "unexpected value"));
+	return (json_ret_errorv(res, "unexpected token"));
 }

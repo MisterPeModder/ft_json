@@ -6,14 +6,15 @@
 /*   By: yguaye <yguaye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/24 14:53:29 by yguaye            #+#    #+#             */
-/*   Updated: 2018/04/30 00:00:34 by yguaye           ###   ########.fr       */
+/*   Updated: 2018/05/04 23:30:48 by yguaye           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <libft_base/stringft.h>
 #include <libft_base/character.h>
-#include <math.h>
+#include <libft_math/calc.h>
 #include "json.h"
+#include "json_internal.h"
 
 static void				*json_number_check(const char *src, t_json_parse_res *r)
 {
@@ -62,7 +63,7 @@ static double			json_num_get_exp(const char *src)
 		++src;
 	if (!*src || !*(src + 1))
 		return (1);
-	return (pow(10., (double)atoi(src + 1)));
+	return (ft_pow(10., atoi(src + 1)));
 }
 
 int						json_make_number(t_json_value *num, const char *src,

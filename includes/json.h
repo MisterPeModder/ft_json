@@ -6,36 +6,47 @@
 /*   By: yguaye <yguaye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/11 10:07:33 by yguaye            #+#    #+#             */
-/*   Updated: 2018/05/03 08:18:11 by yguaye           ###   ########.fr       */
+/*   Updated: 2018/05/04 22:54:05 by yguaye           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef JSON_H
 # define JSON_H
 
-# include "json_internal.h"
+# include "json_datatypes.h"
+
+/*
+** tells the parser wheter it ignore checking for extra
+** non-whitspace characters after the main object.
+*/
+# define JFLAG_IGNORE_EXTRA 1
+
+/*
+** ignores comments.
+*/
+# define JFLAG_ALLOW_COMMENTS 2
 
 /*
 ** json_from_file: parses a file's contents into a JSON object.
 **
 ** -fd: the file descriptor.
-** -ignore_extra: tells the parser wheter it ignore checking for extra
-**                non-whitspace characters after the main object.
+** -flags: flags for the parser. NOTE: only the above flags may be used !
+**
+** example: json_from_file(42, JFLAG_ALLOW_EXTRA | JFLAG_INGORE_EXTRA);
 **
 ** returns: a t_json_parse_res instance.
 */
-t_json_parse_res		*json_from_file(int fd, int ignore_extra);
+t_json_parse_res		*json_from_file(int fd, int flags);
 
 /*
 ** json_from_str: parses a string into a JSON object.
 **
 ** -src: the source string.
-** -ignore_extra: tells the parser wheter it ignore checking for extra
-**                non-whitspace characters after the main object.
+** -flags: flags for the parser. NOTE: only the above flags may be used !
 **
 ** returns: a t_json_parse_res instance.
 */
-t_json_parse_res		*json_from_str(const char *src, int ignore_extra);
+t_json_parse_res		*json_from_str(const char *src, int flags);
 
 /*
 ** json_to_tab: converts the passed JSON value into an array.

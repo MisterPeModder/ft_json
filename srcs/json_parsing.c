@@ -6,13 +6,14 @@
 /*   By: yguaye <yguaye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/19 06:09:03 by yguaye            #+#    #+#             */
-/*   Updated: 2018/05/04 21:48:35 by yguaye           ###   ########.fr       */
+/*   Updated: 2018/05/04 22:59:16 by yguaye           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <libft_base/list.h>
 #include <libft_base/memory.h>
 #include "json.h"
+#include "json_internal.h"
 
 static int				json_is_special(t_json_value *val, char c)
 {

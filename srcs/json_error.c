@@ -6,12 +6,13 @@
 /*   By: yguaye <yguaye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/19 04:08:33 by yguaye            #+#    #+#             */
-/*   Updated: 2018/04/29 21:47:03 by yguaye           ###   ########.fr       */
+/*   Updated: 2018/05/04 23:02:55 by yguaye           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <libft_base/stringft.h>
 #include "json.h"
+#include "json_internal.h"
 
 void					json_set_error(t_json_parse_res *res, char *msg)
 {

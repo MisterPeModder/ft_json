@@ -6,7 +6,7 @@
 /*   By: yguaye <yguaye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/03 13:36:07 by yguaye            #+#    #+#             */
-/*   Updated: 2018/05/03 16:21:04 by yguaye           ###   ########.fr       */
+/*   Updated: 2018/05/04 23:03:10 by yguaye           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include <libft_base/stringft.h>
 #include <libft_containers/dyn_str.h>
 #include "json.h"
+#include "json_internal.h"
 
 static int				json_lex_str_setback(t_json_parse_res *res, int lc)
 {

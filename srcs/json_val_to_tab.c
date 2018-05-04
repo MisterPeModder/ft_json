@@ -6,12 +6,13 @@
 /*   By: yguaye <yguaye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/22 16:19:07 by yguaye            #+#    #+#             */
-/*   Updated: 2018/05/04 16:37:43 by yguaye           ###   ########.fr       */
+/*   Updated: 2018/05/04 23:02:21 by yguaye           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <libft_base/stringft.h>
 #include "json.h"
+#include "json_internal.h"
 
 static int				json_obj_to_tab(const t_json_value *val, char **tab)
 {
