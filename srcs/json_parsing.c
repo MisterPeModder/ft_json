@@ -6,7 +6,7 @@
 /*   By: yguaye <yguaye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/19 06:09:03 by yguaye            #+#    #+#             */
-/*   Updated: 2018/05/03 13:23:50 by yguaye           ###   ########.fr       */
+/*   Updated: 2018/05/04 21:48:35 by yguaye           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,8 @@ static int				json_parse_obj_value(t_json_str_it *it,
 		return (0);
 	if (!(v = json_parse_value(it, &second, res)) && json_rd(&second))
 		return (0);
+	if (v->obj.type == JSON_SPECIAL_CHAR && json_release(&v))
+		return (json_ret_errorv(res, "unexpected value"));
 	if (hm_get(obj->obj.data, first->str.value) && json_release(&v))
 		return (json_ret_errorv(res, "cannot use the same key twice!"));
 	hm_put(obj->obj.data, first->str.value, v);
@@ -112,7 +114,7 @@ t_json_value			*json_parse_object(t_json_str_it *it, int has_parent,
 			json_rd(&v);
 			return (json_ret_error(res, "missing comma ','"));
 		}
-		if (!json_lexing(&v, it, res, 0) && json_rd(&v))
+		if (!json_lexing(&v, it, res, 0) && json_rd(&v) && json_release(&obj))
 			return (NULL);
 	}
 	json_release(&obj);
@@ -179,7 +181,10 @@ t_json_value			*json_parse_array(t_json_str_it *it,
 			return (json_ret_error(res, "missing comma ','"));
 		}
 		if (!json_lexing(&v, it, res, 0) && json_rd(&v))
+		{
+			ft_lstdel(&elems, &json_rel4lst);
 			return (NULL);
+		}
 	}
 	ft_lstdel(&elems, &json_rel4lst);
 	return (json_ret_error(res, "cannot have comma ',' on last element"));

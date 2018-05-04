@@ -6,7 +6,7 @@
 /*   By: yguaye <yguaye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/19 03:35:29 by yguaye            #+#    #+#             */
-/*   Updated: 2018/05/04 15:14:33 by yguaye           ###   ########.fr       */
+/*   Updated: 2018/05/04 21:43:51 by yguaye           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,6 @@
 #include <libft_base/stringft.h>
 #include <libft_base/character.h>
 #include "json.h"
-
-static int				json_is_special_char(char c)
-{
-	return (c == '{' || c == '}'
-			|| c == '[' || c == ']'
-			|| c == ':' || c == ',');
-}
 
 static int				json_next_token(char *str, t_json_str_it *it,
 		t_json_parse_res *res, char begin)
@@ -57,13 +50,6 @@ static int				json_from_token(t_json_value *v, const char *str)
 	else if (ft_strcmp("null", str) == 0)
 		return (json_mksimple(v, 0, JSON_NULL));
 	return (0);
-}
-
-static int				json_unexpected_char(t_json_parse_res *res, char *str)
-{
-	if (str)
-		res->col -= (int)ft_strlen(str);
-	return (json_ret_errorv(res, "unexpected value"));
 }
 
 static char				json_skip(t_json_str_it *it, t_json_parse_res *res)
@@ -106,7 +92,8 @@ int						json_lexing(t_json_value *v, t_json_str_it *it,
 		return (0);
 	else if (c == '"')
 		return (json_lex_str(v, it, res, 0));
-	else if (json_is_special_char(c))
+	else if (c == '{' || c == '}' || c == '[' || c == ']'
+			|| c == ':' || c == ',')
 		return (json_mksimple(v, c, JSON_SPECIAL_CHAR));
 	else if (!json_next_token(str, it, res, c))
 		return (0);
@@ -114,5 +101,6 @@ int						json_lexing(t_json_value *v, t_json_str_it *it,
 		return (1);
 	else if (ft_isdigit(*str) || *str == '-')
 		return (json_make_number(v, str, res));
-	return (json_unexpected_char(res, str));
+	res->col -= (int)ft_strlen(str) - 1;
+	return (json_ret_errorv(res, "unexpected value"));
 }
