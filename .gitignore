@@ -3,4 +3,3 @@
 libftjson.a
 *.json
 *.dSYM
-json_test

@@ -53,11 +53,6 @@ INCS :=			json.h				\
 				json_datatypes.h	\
 				json_internal.h		\
 
-TEST_NAME = json_test
-TEST_SRC = $(SRC_PATH)/json_test.c
-TEST_LDFLAGS := -L. -l$(LIB_NAME) -L$(LIBFT_PATH) -l$(LIBFT_NAME)
-TEST_CPPFLAGS := -isystem$(INC_PATH) -isystem$(LIBFT_PATH)/includes
-
 # THE NORM IS REAL
 NORM_LOG := norm.log
 NORM_FILES := $(SRCS) $(INCS)
@@ -103,7 +98,6 @@ clean:
 
 fclean: clean
 	@$(RM) $(NAME) 2> /dev/null || true
-	@$(RM) $(TEST_NAME) 2> /dev/null || true
 	@make -C $(LIBFT_PATH) fclean > /dev/null
 	@$(PRINT) "$(DYELLOW)Removed $(YELLOW)$(NAME) library!$(RESET)\n\n"
 
@@ -118,11 +112,4 @@ norm:
 	@cat $(NORM_LOG) | grep Error | wc -l | bc
 	@$(PRINT) "See $(UNDERLINE)$(NORM_LOG)$(RESET) for details.\n"
 
-test: $(TEST_NAME)
-
-$(TEST_NAME): $(NAME) $(LIBFT) $(TEST_SRC)
-	@$(PRINT) "\n$(GREY)Compiling $(RESET)test file$(GREY): $(RESET)"
-	@$(CC) $(TEST_LDFLAGS) $(TEST_CPPFLAGS) $(CFLAGS) $(TEST_SRC) -o $(TEST_NAME)
-	@$(PRINT) "$(GREEN)done!$(RESET)\n"
-
-.PHONY: test all clean fclean re norm
+.PHONY: all clean fclean re norm
