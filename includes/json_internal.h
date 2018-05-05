@@ -6,7 +6,7 @@
 /*   By: yguaye <yguaye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/19 01:26:24 by yguaye            #+#    #+#             */
-/*   Updated: 2018/05/05 05:51:27 by yguaye           ###   ########.fr       */
+/*   Updated: 2018/05/05 11:24:39 by yguaye           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,5 +89,13 @@ int						json_lex_str(t_json_value *v, t_json_str_it *it,
 		t_json_parse_res *res, int lc);
 
 char					*json_stringify(const char *src);
+
+int						json_is_special(t_json_value *val, char c);
+
+t_json_value			*json_parse_value(t_json_str_it *it, t_json_value *val,
+		t_json_parse_res *res);
+
+int						json_parse_obj_value(t_json_str_it *it,
+		t_json_value *obj, t_json_value *first, t_json_parse_res *res);
 
 #endif

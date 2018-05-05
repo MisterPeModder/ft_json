@@ -6,7 +6,7 @@
 /*   By: yguaye <yguaye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/19 02:25:32 by yguaye            #+#    #+#             */
-/*   Updated: 2018/04/28 20:10:42 by yguaye           ###   ########.fr       */
+/*   Updated: 2018/05/05 06:29:52 by yguaye           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,32 +82,29 @@ char					json_it_peek(t_json_str_it *it)
 	}
 }
 
-char					json_it_next(t_json_str_it *it, t_json_parse_res *res)
+char					json_it_next(t_json_str_it *i, t_json_parse_res *res)
 {
-	if (it->str.end)
+	if (i->str.end)
 		return (0);
-	if (!it->str.is_file)
+	if (!i->str.is_file)
 	{
-		if (!it->str.str[it->str.i + 1])
-			it->str.end = 1;
-		return (json_it_inc(res, it->str.str[it->str.i++], &it->str.tabc));
+		if (!i->str.str[i->str.i + 1])
+			i->str.end = 1;
+		return (json_it_inc(res, i->str.str[i->str.i++], &i->str.tabc));
 	}
 	else
 	{
-		if (it->file.i >= it->file.data_size)
+		if (i->file.i >= i->file.data_size)
 		{
-			if ((it->file.data_size = read(it->file.fd, it->file.data,
+			if ((i->file.data_size = read(i->file.fd, i->file.data,
 							JRD_PACKET)) == -1)
-			{
-				it->file.end = 1;
-				return (json_it_inc(res, 0, &it->str.tabc));
-			}
-			it->file.i = 0;
+				return (json_it_inc(res, (i->file.end = 1) - 1, &i->str.tabc));
+			i->file.i = 0;
 		}
-		if (it->file.data_size < JRD_PACKET &&
-				it->file.i >= it->file.data_size - 1)
-			it->file.end = 1;
-		return (json_it_inc(res, it->file.data[it->file.i++],
-					&it->str.tabc));
+		if (i->file.data_size < JRD_PACKET &&
+				i->file.i >= i->file.data_size - 1)
+			i->file.end = 1;
+		return (json_it_inc(res, i->file.data[i->file.i++],
+					&i->str.tabc));
 	}
 }

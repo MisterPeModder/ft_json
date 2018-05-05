@@ -6,7 +6,7 @@
 /*   By: yguaye <yguaye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/19 01:32:03 by yguaye            #+#    #+#             */
-/*   Updated: 2018/04/29 21:49:04 by yguaye           ###   ########.fr       */
+/*   Updated: 2018/05/05 06:30:14 by yguaye           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,6 @@ t_json_value			*json_make_value(t_json_vtype type)
 void					json_init_value(t_json_value *v, t_json_vtype type)
 {
 	v->obj.type = type;
-	/*if (type == JSON_OBJECT && !(v->obj.data = hm_make(0, 0)))
-	  return (0);*/
 	if (type == JSON_OBJECT)
 		v->obj.data = NULL;
 	else if (type == JSON_STRING)
