@@ -1,5 +1,11 @@
 # Project settings
-NAME := libftjson.a
+LIB_NAME := ftjson
+NAME := lib$(LIB_NAME).a
+
+# Libft
+LIBFT_PATH := libft
+LIBFT_NAME := ft
+LIBFT := $(LIBFT_PATH)/lib$(LIBFT_NAME).a
 
 # Basic definitions
 SRC_PATH := srcs
@@ -7,7 +13,7 @@ OBJ_PATH := .bin
 INC_PATH := includes
 
 # Compiler flags
-CPPFLAGS = -iquote$(INC_PATH) -isystemlibft/includes
+CPPFLAGS := -iquote$(INC_PATH) -isystem$(LIBFT_PATH)/includes
 CFLAGS := -Wall -Wextra -Werror -std=c89 -pedantic -Wmissing-prototypes -Wsign-conversion -g
 
 # Commands
@@ -46,6 +52,11 @@ INCS :=			json.h				\
 				json_datatypes.h	\
 				json_internal.h		\
 
+TEST_NAME = json_test
+TEST_SRC = $(SRC_PATH)/json_test.c
+TEST_LDFLAGS := -L. -l$(LIB_NAME) -L$(LIBFT_PATH) -l$(LIBFT_NAME)
+TEST_CPPFLAGS := -isystem$(INC_PATH) -isystem$(LIBFT_PATH)/includes
+
 # THE NORM IS REAL
 NORM_LOG := norm.log
 NORM_FILES := $(SRCS) $(INCS)
@@ -59,18 +70,18 @@ YELLOW := \033[93m
 DYELLOW := \033[33m
 UNDERLINE := \033[4m
 
-all: $(NAME)
-
-debug:
-	@echo $(OBJS)
+all: $(LIBFT) $(NAME)
 
 $(NAME): $(OBJ_PATH) $(OBJS)
 ifeq ($(DETAILED), 1)
 	@tput dl; tput el1; tput cub 100; $(PRINT) "$(GREY)Creating object files: $(GREEN)done!$(RESET)"
 endif
 	@$(PRINT) "\n$(GREY)Compiling $(RESET)$(NAME)$(GREY): $(RESET)"
-	@$(LC) $(NAME) $(OBJS)
+	@$(LC) $(NAME) $(OBJS) $(LIBFT)
 	@$(PRINT) "$(GREEN)done!$(RESET)\n"
+
+$(LIBFT):
+	@make -C libft VERBOSE=0
 
 $(OBJ_PATH):
 	@$(MKDIR) $@
@@ -86,10 +97,13 @@ clean:
 	@$(RM) -r *.dSYM
 	@$(RM) $(OBJS) 2> /dev/null || true
 	@$(RMDIR) $(OBJS_DIRS) 2> /dev/null || true
+	@make -C $(LIBFT_PATH) clean > /dev/null
 	@$(PRINT) "$(DYELLOW)Removed $(YELLOW)object files!$(RESET)\n"
 
 fclean: clean
 	@$(RM) $(NAME) 2> /dev/null || true
+	@$(RM) $(TEST_NAME) 2> /dev/null || true
+	@make -C $(LIBFT_PATH) fclean > /dev/null
 	@$(PRINT) "$(DYELLOW)Removed $(YELLOW)$(NAME) library!$(RESET)\n\n"
 
 re: fclean all
@@ -103,4 +117,11 @@ norm:
 	@cat $(NORM_LOG) | grep Error | wc -l | bc
 	@$(PRINT) "See $(UNDERLINE)$(NORM_LOG)$(RESET) for details.\n"
 
-.PHONY: all clean fclean re norm
+test: $(TEST_NAME)
+
+$(TEST_NAME): $(NAME) $(LIBFT) $(TEST_SRC)
+	@$(PRINT) "\n$(GREY)Compiling $(RESET)test file$(GREY): $(RESET)"
+	@$(CC) $(TEST_LDFLAGS) $(TEST_CPPFLAGS) $(CFLAGS) $(TEST_SRC) -o $(TEST_NAME)
+	@$(PRINT) "$(GREEN)done!$(RESET)\n"
+
+.PHONY: test all clean fclean re norm
