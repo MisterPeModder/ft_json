@@ -6,7 +6,7 @@
 /*   By: yguaye <yguaye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/11 10:07:33 by yguaye            #+#    #+#             */
-/*   Updated: 2018/05/05 03:06:02 by yguaye           ###   ########.fr       */
+/*   Updated: 2018/05/05 16:48:49 by yguaye           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,11 +72,11 @@ char					*json_to_str(const t_json_value *val);
 ** json_to_file: puts the contents of a JSON object into a file.
 **
 ** -obj: a pointer to a JSON object instance.
-** -p: the file path, creates the file if it doesn't exists.
+** -p: the file descriptor.
 **
 ** returns: 1 if successful, 0 if not.
 */
-int						json_to_file(const t_json_object *obj, const char *p);
+int						json_to_file(const t_json_value *obj, int fd);
 
 /*
 ** json_release_value: frees the passed JSON value.

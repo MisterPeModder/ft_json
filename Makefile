@@ -41,6 +41,7 @@ SRCS_NAMES :=	json_check_number.c		\
 				json_release.c			\
 				json_str_iterator.c		\
 				json_stringify.c		\
+				json_to_file.c			\
 				json_to_str.c			\
 				json_val_to_tab.c		\
 

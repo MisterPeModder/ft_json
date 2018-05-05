@@ -6,7 +6,7 @@
 /*   By: yguaye <yguaye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/05 12:49:19 by yguaye            #+#    #+#             */
-/*   Updated: 2018/05/05 13:46:26 by yguaye           ###   ########.fr       */
+/*   Updated: 2018/05/05 16:55:58 by yguaye           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,7 @@
 
 static int				process_file(t_json_parse_res *res)
 {
-	char				*str;
-
+	int out;
 	if (!res)
 	{
 		perror("couldn't parse JSON");
@@ -40,8 +39,9 @@ static int				process_file(t_json_parse_res *res)
 		json_release_file(&res, 1);
 		return (5);
 	}
-	ft_putstr((str = json_to_str(res->obj)));
-	ft_strdel(&str);
+	out = open("./out", O_WRONLY | O_CREAT, 0644);
+	json_to_file(res->obj, out);
+	close(out);
 	json_release_file(&res, 1);
 	return (0);
 }
