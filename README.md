@@ -5,8 +5,6 @@ A C implementation of the JSON data-interchange format made as a school project 
 ## Building
 
 This project requires **make** to be compiled, once installed simply type `make` in your shell to build the library.  
-You can also execute `make test` to build the test program. (see the [test suite section](https://github.com/MisterPeModder44/ft_json/blob/master/README.md#the-test-program) for more infos)
-
 
 To build your program against the library link it using the compiler flags below:  
 `-L $JSON_LIB_PATH 
@@ -59,14 +57,6 @@ Each entry of `t_json_vtype` corresponds to a structure within `t_json_value`, e
 
 #### The other functions:
 The [`<json.h>` header](https://github.com/MisterPeModder44/ft_json/blob/master/includes/json.h) contains all the function you might want to use and documentation about them.
-
-## The test program:
-
-The test programs parses a JSON object and then serialize it.
-
-This program takes two arguments, the first one is either _string_ or _file_:
-* if set to _string_ the second argument must be JSON code.
-* if set to _file_ the second argument must be a filename.
 
 ## LICENSE:
 The ft_json library is is licensed under the *GNU General Public License v3.0*
