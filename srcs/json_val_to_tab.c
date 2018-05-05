@@ -6,7 +6,7 @@
 /*   By: yguaye <yguaye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/22 16:19:07 by yguaye            #+#    #+#             */
-/*   Updated: 2018/05/04 23:02:21 by yguaye           ###   ########.fr       */
+/*   Updated: 2018/05/05 04:48:14 by yguaye           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,7 @@ int						json_val_to_tab(const t_json_value *val, char **tab)
 	else if (val->obj.type == JSON_INT)
 		*tab = ft_itoa(val->n_i.value);
 	else if (val->obj.type == JSON_DOUBLE)
-		*tab = json_double_to_str(val->n_d.value);
+		*tab  = json_suppress_zeros(ft_dtoa(val->n_d.value, JSON_FP_PRECISION));
 	else if (val->obj.type == JSON_BOOL)
 		*tab = ft_strdup(val->bol.value ? "true" : "false");
 	else if (val->obj.type == JSON_NULL)

@@ -6,7 +6,7 @@
 /*   By: yguaye <yguaye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/11 10:07:33 by yguaye            #+#    #+#             */
-/*   Updated: 2018/05/04 22:54:05 by yguaye           ###   ########.fr       */
+/*   Updated: 2018/05/05 03:06:02 by yguaye           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,5 +131,10 @@ int						json_obj_put(t_json_object *obj, t_json_value *v,
 */
 int						json_arr_put(t_json_array *arr, t_json_value *v,
 		size_t i);
+
+/*
+** defines how prescise the serializer should be when handling doubles.
+*/
+# define JSON_FP_PRECISION 16
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: yguaye <yguaye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/19 01:26:24 by yguaye            #+#    #+#             */
-/*   Updated: 2018/05/04 17:12:45 by yguaye           ###   ########.fr       */
+/*   Updated: 2018/05/05 05:51:27 by yguaye           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,9 @@ void					json_rel4lst(void *value, size_t s);
 int						json_make_number(t_json_value *v, const char *src,
 		t_json_parse_res *r);
 
-char					*json_double_to_str(double num);
+int						json_number_check(const char *src, t_json_parse_res *r);
+
+char					*json_suppress_zeros(char *str);
 
 int						json_rd(t_json_value *v);
 

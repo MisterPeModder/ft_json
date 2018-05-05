@@ -6,60 +6,33 @@
 /*   By: yguaye <yguaye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/24 14:53:29 by yguaye            #+#    #+#             */
-/*   Updated: 2018/05/04 23:30:48 by yguaye           ###   ########.fr       */
+/*   Updated: 2018/05/05 06:13:08 by yguaye           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <libft_base/stringft.h>
-#include <libft_base/character.h>
 #include <libft_math/calc.h>
-#include "json.h"
 #include "json_internal.h"
 
-static void				*json_number_check(const char *src, t_json_parse_res *r)
+static double			json_parse_dpart(const char *src)
 {
-	int					i;
+	double				r;
 
-	i = *src == '-' ? 1 : 0;
-	if (!src[i])
-		return (json_ret_error(r, "incomplete number"));
-	if (src[i] == '0' && src[i + 1] && ft_isdigit(src[i + 1]))
-		return (json_ret_error(r, "trailing zero(s)"));
-	else if (src[i] != '0')
-		while (src[++i] && ft_isdigit(src[i]))
-			;
-	else
-		++i;
-	if (!src[i])
-		return (r);
-	if (src[i] == '.')
-		while (src[++i] && ft_isdigit(src[i]))
-			;
-	if (!src[i])
-		return (r);
-	if (src[i] == 'e' || src[i] == 'E')
-	{
-		if (!src[++i])
-			return (json_ret_error(r, "missing number after exponent"));
-		if (src[i] == '+' || src[i] == '-')
-			++i;
-		while (src[i] && ft_isdigit(src[i++]))
-			;
-	}
-	return (src[i] ? json_ret_error(r, "trailing character(s)") : (void *)r);
-}
-
-static double			json_number_to_dec(double r)
-{
+	r = ft_atol(src);
 	r = r < 0 ? -r : r;
-	while (r > 1)
+	while (r >= 1)
 		r /= 10.;
+	while (*src && *src == '0')
+	{
+		r /= 10.;
+		++src;
+	}
 	return (r);
 }
 
 static double			json_num_get_exp(const char *src)
 {
-	while (*src && (*src != 'E' || *src != 'e'))
+	while (*src && *src != 'E' && *src != 'e')
 		++src;
 	if (!*src || !*(src + 1))
 		return (1);
@@ -70,17 +43,20 @@ int						json_make_number(t_json_value *num, const char *src,
 		t_json_parse_res *r)
 {
 	int					e_part;
+	double				a_part;
 
 	if (!json_number_check(src, r))
 		return (0);
 	e_part = ft_atoi(src);
-	while (*src || *src == '.')
+	while (*src && *src != '.' && *src != 'E' && *src != 'e')
 		++src;
-	if (*(src - 1) == '.')
+	if (*src == '.')
 	{
 		num->n_d.type = JSON_DOUBLE;
-		num->n_d.value = ((double)e_part) + json_number_to_dec(ft_atoi(src));
-		num->n_d.value *= (double)json_num_get_exp(src);
+		a_part = e_part < 0 ? -e_part : e_part;
+		num->n_d.value = a_part + json_parse_dpart(++src);
+		num->n_d.value *= e_part < 0 ? -1 : 1;
+		num->n_d.value *= json_num_get_exp(src);
 	}
 	else
 	{
@@ -91,8 +67,17 @@ int						json_make_number(t_json_value *num, const char *src,
 	return (1);
 }
 
-char					*json_double_to_str(double num)
+char					*json_suppress_zeros(char *str)
 {
-	(void)num;
-	return (NULL);
+	int					i;
+
+	if (!str)
+		return (NULL);
+	i = -1;
+	while (str[++i])
+		;
+	--i;
+	while (i > 0 && str[i] == '0' && str[i - 1] != '.')
+		str[i--] = 0;
+	return (str);
 }
