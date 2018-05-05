@@ -5,7 +5,7 @@ A C implementation of the JSON data-interchange format made as a school project 
 ## Building
 
 This project requires **make** to be compiled, once installed simply type `make` in your shell to build the library.  
-You can also execute `make test` to build the test program. (see the [test suite section](https://github.com/MisterPeModder44/README.md#L63) for more infos)
+You can also execute `make test` to build the test program. (see the [test suite section](https://github.com/MisterPeModder44/ft_json/blob/master/README.md#the-test-program) for more infos)
 
 
 To build your program against the library link it using the compiler flags below:  
