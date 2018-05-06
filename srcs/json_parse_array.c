@@ -6,7 +6,7 @@
 /*   By: yguaye <yguaye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/05 06:55:35 by yguaye            #+#    #+#             */
-/*   Updated: 2018/05/05 07:01:01 by yguaye           ###   ########.fr       */
+/*   Updated: 2018/05/07 00:29:54 by yguaye           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,27 +63,27 @@ static t_json_value		*json_convert_lst2arr(t_list *elems)
 }
 
 static t_json_value		*json_parse_array_helper(t_json_str_it *it,
-		t_json_parse_res *res, t_list *elems, t_json_value *v)
+		t_json_parse_res *res, t_list **elems, t_json_value *v)
 {
-	if (!json_is_special(v, ']') && (!json_parse_arr_value(it, &elems,
+	if (!json_is_special(v, ']') && (!json_parse_arr_value(it, elems,
 					v, res) || !json_lexing(v, it, res, 0)) &&
 			json_rd(v))
 	{
-		ft_lstdel(&elems, &json_rel4lst);
+		ft_lstdel(elems, &json_rel4lst);
 		return (NULL);
 	}
 	if (!json_is_special(v, ','))
 	{
 		if (json_is_special(v, ']'))
-			return (json_convert_lst2arr(elems));
-		ft_lstdel(&elems, &json_rel4lst);
+			return (json_convert_lst2arr(*elems));
+		ft_lstdel(elems, &json_rel4lst);
 		--res->line;
 		json_rd(v);
 		return (json_ret_error(res, "missing comma ','"));
 	}
 	if (!json_lexing(v, it, res, 0) && json_rd(v))
 	{
-		ft_lstdel(&elems, &json_rel4lst);
+		ft_lstdel(elems, &json_rel4lst);
 		return (NULL);
 	}
 	return ((t_json_value *)~((ptrdiff_t)NULL));
@@ -103,7 +103,7 @@ t_json_value			*json_parse_array(t_json_str_it *it,
 	elems = NULL;
 	while (!json_is_special(&v, ']'))
 	{
-		if ((ret = json_parse_array_helper(it, res, elems, &v)) == NULL)
+		if ((ret = json_parse_array_helper(it, res, &elems, &v)) == NULL)
 			return (NULL);
 		if (ret != ((t_json_value *)~((ptrdiff_t)NULL)))
 			return (ret);
