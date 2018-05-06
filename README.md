@@ -9,9 +9,8 @@ You can also execute `make test` to build the test program. (see the [test suite
 
 
 To build your program against the library link it using the compiler flags below:  
-`-L $JSON_LIB_PATH 
--l ftjson -L$ LIBFT_PATH -l ft`  
-where JSON_LIB_PATH and LIBFT_PATH corresponds to the folder where the json and libft libraries are located, respectively.
+`-L$JSON_LIB_PATH -L$LIBFT_PATH -lft -lftjson -lft`  
+where $JSON_LIB_PATH and $LIBFT_PATH corresponds to the folder where the json and libft libraries are located, respectively.
 
 ## Usage
 
