@@ -120,9 +120,9 @@ norm:
 
 test: $(TEST_NAME)
 
-$(TEST_NAME): $(NAME) $(LIBFT) $(TEST_SRC)
+$(TEST_NAME): $(LIBFT) $(NAME) $(TEST_SRC)
 	@$(PRINT) "\n$(GREY)Compiling $(RESET)test file$(GREY): $(RESET)"
-	@$(CC) $(TEST_LDFLAGS) $(TEST_CPPFLAGS) $(CFLAGS) $(TEST_SRC) -o $(TEST_NAME)
+	@$(CC) $(TEST_SRC) $(TEST_LDFLAGS) $(TEST_CPPFLAGS) $(CFLAGS) -o $(TEST_NAME)
 	@$(PRINT) "$(GREEN)done!$(RESET)\n"
 
 .PHONY: test all clean fclean re norm
