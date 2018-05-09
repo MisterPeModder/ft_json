@@ -4,7 +4,7 @@ NAME := lib$(LIB_NAME).a
 
 # Libft
 ifndef LIBFT_PATH
-LIBFT_PATH := libft
+$(error missing LIBFT_PATH variable)
 endif
 
 LIBFT_NAME := ft
