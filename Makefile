@@ -3,7 +3,10 @@ LIB_NAME := ftjson
 NAME := lib$(LIB_NAME).a
 
 # Libft
+ifndef LIBFT_PATH
 LIBFT_PATH := libft
+endif
+
 LIBFT_NAME := ft
 LIBFT := $(LIBFT_PATH)/lib$(LIBFT_NAME).a
 
@@ -82,7 +85,7 @@ endif
 	@$(PRINT) "$(GREEN)done!$(RESET)\n"
 
 $(LIBFT):
-	@make -C libft VERBOSE=0
+	@make -C $(LIBFT_PATH) VERBOSE=0
 
 $(OBJ_PATH):
 	@$(MKDIR) $@
