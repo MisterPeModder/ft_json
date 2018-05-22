@@ -6,7 +6,7 @@
 /*   By: yguaye <yguaye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/24 01:26:18 by yguaye            #+#    #+#             */
-/*   Updated: 2018/05/10 15:05:59 by yguaye           ###   ########.fr       */
+/*   Updated: 2018/05/22 16:16:47 by yguaye           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,13 +17,10 @@
 static t_json_parse_res	*json_check_after_main(t_json_parse_res *res,
 		t_json_str_it *it, int f)
 {
-	char c;
-
 	if (!(f & JFLAG_IGNORE_EXTRA))
 		return (res);
 	while (!it->str.end)
 	{
-		c = json_it_peek(it);
 		if (it->str.is_file && it->file.i >= it->file.data_size)
 			break ;
 		if (!ft_isspace(json_it_next(it, res)) && json_release(&res->obj))
