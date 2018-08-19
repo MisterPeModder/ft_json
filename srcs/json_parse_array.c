@@ -6,7 +6,7 @@
 /*   By: yguaye <yguaye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/05 06:55:35 by yguaye            #+#    #+#             */
-/*   Updated: 2018/05/07 00:29:54 by yguaye           ###   ########.fr       */
+/*   Updated: 2018/08/20 01:19:50 by yguaye           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,8 +66,8 @@ static t_json_value		*json_parse_array_helper(t_json_str_it *it,
 		t_json_parse_res *res, t_list **elems, t_json_value *v)
 {
 	if (!json_is_special(v, ']') && (!json_parse_arr_value(it, elems,
-					v, res) || !json_lexing(v, it, res, 0)) &&
-			json_rd(v))
+					v, res) || !json_lexing(v, it, res, 0))
+			&& json_rd(v))
 	{
 		ft_lstdel(elems, &json_rel4lst);
 		return (NULL);

@@ -6,7 +6,7 @@
 /*   By: yguaye <yguaye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/19 06:09:03 by yguaye            #+#    #+#             */
-/*   Updated: 2018/05/05 11:23:56 by yguaye           ###   ########.fr       */
+/*   Updated: 2018/08/20 01:20:10 by yguaye           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,8 @@ static t_json_value		*json_parse_obj_middle(t_json_value *v,
 		t_json_str_it *it, t_json_parse_res *res, t_json_value *obj)
 {
 	if (!json_is_special(v, '}') && (!json_parse_obj_value(it, obj, v, res)
-				|| !json_lexing(v, it, res, 0)) &&
-			json_release(&obj) && json_rd(v))
+				|| !json_lexing(v, it, res, 0))
+			&& json_release(&obj) && json_rd(v))
 		return (NULL);
 	return (v);
 }
@@ -44,8 +44,8 @@ static t_json_value		*json_parse_obj_finish(t_json_value *v,
 {
 	if (!json_is_special(v, ','))
 	{
-		if (json_is_special(v, '}') ||
-				!(json_release(&obj) && json_rd(v) && (--res->line + 1)))
+		if (json_is_special(v, '}')
+				|| !(json_release(&obj) && json_rd(v) && (--res->line + 1)))
 			return (obj);
 		return (json_ret_error(res, "missing comma ','"));
 	}
@@ -83,8 +83,8 @@ t_json_value			*json_parse_object(t_json_str_it *it, int has_parent,
 		}
 		else if (is_begin && !has_parent && json_release(&obj))
 			return (json_ret_error(res, "main object must start with '{'"));
-		if (!json_parse_obj_middle(&v, it, res, obj) ||
-				(ret = json_parse_obj_finish(&v, obj, res, it)) == NULL)
+		if (!json_parse_obj_middle(&v, it, res, obj)
+				|| (ret = json_parse_obj_finish(&v, obj, res, it)) == NULL)
 			return (NULL);
 		if (ret != ((t_json_value *)~(ptrdiff_t)NULL))
 			return (ret);
