@@ -6,7 +6,7 @@
 /*   By: yguaye <yguaye@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/19 02:25:32 by yguaye            #+#    #+#             */
-/*   Updated: 2018/05/05 06:29:52 by yguaye           ###   ########.fr       */
+/*   Updated: 2018/08/20 01:20:27 by yguaye           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,8 +101,8 @@ char					json_it_next(t_json_str_it *i, t_json_parse_res *res)
 				return (json_it_inc(res, (i->file.end = 1) - 1, &i->str.tabc));
 			i->file.i = 0;
 		}
-		if (i->file.data_size < JRD_PACKET &&
-				i->file.i >= i->file.data_size - 1)
+		if (i->file.data_size < JRD_PACKET
+				&& i->file.i >= i->file.data_size - 1)
 			i->file.end = 1;
 		return (json_it_inc(res, i->file.data[i->file.i++],
 					&i->str.tabc));
